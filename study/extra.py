@@ -47,3 +47,10 @@ from sklearn.linear_model import Ridge, Lasso
 ->  .fit(x_train,y_train)  ->  train_score/test_score.append(.score(train/test))
 ->  plt.plot(np.log10(alpha_list),train_score/test_score) 그리고 제일 가까운 값 확인
 -> 그 alpha로 .fit  ->np.sum(.coef_==0)로 몇개 차원 없어졌는지 확인  ->.score  ->.predict(poly+ss_data)
+
+
+
+#2. classification
+
+1. kneigborclassification
+- 이웃개수k에서 predict_proba에서 나오는 값들은 (각 클래스별 선택된 개수)/k 임-> 이 값이 가장 큰애를 해당 클래스로 예측
