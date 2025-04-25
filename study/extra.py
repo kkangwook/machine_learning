@@ -81,3 +81,4 @@ from sklearn.linear_model import Ridge, Lasso
       ex) lr.classes_=['bream','smelt']일 경우 smelt가 클래스1-> expit(z)값은 클래스1인 smelt일 확률
 -다중분류: 각각의 클래스마다 선형방정식을 구해 소프트맥스함수에 통과시켜 전체합이 1이 되도록하고 그중 가장 큰값을 정답으로
     c값은 양수로 보통 0.01에서 1000사이로 지정
+    lr.decision_funtion으로 z값 구하면 각 클래스의 선형방정식 별 모든 z값 구해줌
