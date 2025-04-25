@@ -111,7 +111,7 @@ x의 가중치를 변경해가면서 기울기 0되는곳을 찾는것임
 2. 확률적 경사 하강법 사용
 배치 경사 하강법(Batch Gradient Descent)은 전체 데이터를 한 번에 사용하여 평균내고 정확한 평균 기울기를 계산하지만, 
 확률적 경사 하강법(SGD)은 단일 데이터 포인트를 사용하여 기울기를 계산
-  :데이터 하나 뽑아 가중치를 업데이트하고 또 다시 다른 데이터 뽑아 가중치를 업데이트
+  :데이터 하나 뽑아 손실함수 계산-> 가중치를 업데이트하고 또 다시 다른 데이터 뽑아 손실함수계산-> 가중치를 업데이트
     ->이때 하나의 샘플은 그 전체 데이터를 대표하지 못하므로 계산된 기울기에는 잡음이 포함될수밖에 없음
       ->그러면 이러한 잡음은 지역최소값에 머물지 않고 탈출해 더 좋은 전역 최소값에 도달가능
     ->랜덤하게 뽑히면서 클래스정답이 다른 샘플들이 뽑히지만 그런 부분도 다 일정부분 업데이트하여 각 클래스별 선형방정식을 찾음
@@ -123,10 +123,54 @@ x의 가중치를 변경해가면서 기울기 0되는곳을 찾는것임
 
 
 이진분류: 손실함수=이진 교차 엔트로피, 출력함수=시그모이드
+정답값 1일때: 손실값=-log(예측확률), 정답값 0일때: 손실값=-log(1-예측확률)
 다중분류: 손실함수=다중 클래스 교차 엔트로피, 출력함수=소프트맥스
+
+확률적 경사하강법에서 손실함수는 샘플 고를때마다 매번 시행되고 소프트맥스함수는 마지막에 한번 예측할떄 사용
 
 sc.classes_, sc.coef_, sc.intercept_로 클래스별 가중치+절편(선형방정식)을 볼 수 있음
 
 
 
 #사용법
+fish=pd.read_csv('https://bit.ly/fish_csv_data')
+
+# k-neighbor vlassification
+from sklearn.neighbors import KNeighborsClassifier
+-> x,y나누기->train, test나누기->x는 정규화->kn=KNeighborsClassifier(n_neighbors=3)->.fit
+-> train, test score비교->test[:5]로 kn.predict해보기-> kn.classes_, kn.predict_proba로 확률보기
+-> 각 확률은 이웃클래스개수/k
+
+# logistic regression
+from sklearn.linear_model import LogisticRegression
+1. 이진분류: 출력함수로 시그모이드 함수사용
+->x,y나누기->train, test나누기->x는 정규화-> 두 클래스만 가져오기
+  x=train_5v_scaled[(train_species=='Bream')|(train_species=='Smelt')]   #빙어/도미 트레인셋
+  y=train_species[(train_species=='Bream')|(train_species=='Smelt')] 
+-> -5~5z값의 시그모이드 그래프 그리기(z=np.arange(-5,5,0.1), phi=1/(1+np.exp(-z))
+->lr=LogisticRegression()->fit->score->[:5]에 대해 lr.classes_, lr.predict_proba로 클래스와 확률 확인
+->lr.coef_, lr.intercept_로 하나의 선형방정식 확인->z=lr.decision_function([:5])로 z값 확인
+->from scipy.special import expit->expit(z)로 시그모이드함수통한 확률확인->위의 lr.predict_proba와 비교
+
+2. 다중분류: 출력함수로 소프트 맥스 함수 사용
+->x,y나누기->train, test나누기->x는 정규화
+->lr=LogisticRegression(C=20, max_iter=1000) c:0.01(큰 규제)~1000(작은규제)
+-> fit->score로 train, test비교->test[:5]로 predict-> lr.classes_, lr.predict_proba로 확률
+-> lr.coef_, lr.intercept로 클래스별 선형방정식 확인->z=lr.decision_function(test[:5])로 각 클래스방정식 별 z확인
+->from scipy.special import softmax-> sm=softmax(z,axis=1)로 소프트맥스 함수 확인 후 proba와 비교
+
+#확률적 경사하강(Stochastic Gradient Descent)
+from sklearn.linear_model import SGDClassifier
+->x,y나누기->train, test나누기->x는 정규화
+->sc=SGDClassifier(loss='log_loss', max_iter=10, random_state=123, tol=None)  손실함수는 log_loss, hinge(defalut)두가지 존재/  tol=None하면 멈추지 않고 max_iter까지 epoch도달
+->fit->score로 train,test비교->partial_fit으로 추가 학습->score로 얼마나 발전했는지 확인
+->epoch회수 정하기
+  sc=SGDClassifier(loss='log_loss', random_state=123) ;train_score=[] ;test_score=[] ;classes=np.unique(train_species)   #고유 생선종들
+    for _ in range(0,300):
+      sc.partial_fit(x,y, classes=classes)    #partial_fit만 사용시 classes넣어줘야함
+      train_score.append(sc.score(x,y))
+      test_score.append(sc.score(x,y)) 
+    plt.plot(train_score);  plt.plot(test_score)로 그리기-> 어느순간 정확도 감소
+-> 적절한 epoch찾아 다시학습->fit->score->sc.coef_, sc.intercept_로 클래스별 선형방정식 확인
+->predict로 예측->sc.classes_, sc.predict_proba보기
+->sc.decision_function, softmax로 위의 확률과 비교
