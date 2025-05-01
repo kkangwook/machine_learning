@@ -176,3 +176,10 @@ from sklearn.linear_model import SGDClassifier
 -> 적절한 epoch찾아 다시학습->fit->score->sc.coef_, sc.intercept_로 클래스별 선형방정식 확인
 ->predict로 예측->sc.classes_, sc.predict_proba보기
 ->sc.decision_function, softmax로 위의 확률과 비교
+
+
+
+
+#3. 트리
+로지스틱 회귀 분류: 빠름, 데이터 특성이 선형적일때 사용, 과적합에 덜 민감, 복잡한 관계는 잘 못잡아냄
+트리: 비선형적, 복잡한데이터에 많이 사용, 시각화 쉬움, 과적합에 매우 취약
