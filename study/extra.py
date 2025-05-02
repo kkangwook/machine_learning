@@ -185,4 +185,17 @@ from sklearn.linear_model import SGDClassifier
 트리: 비선형적, 복잡한데이터에 많이 사용, 시각화 쉬움, 과적합에 매우 취약
 
 -grid search사용할줄알면 이미 cross-validate기능도 포함하기 때문에 cross-validate따로 사용할 필요X
+  :파라미터 세세히 정의 필요
   : sklearn의 거의 모든 모델에 사용 가능
+-randomized searchcv: 그리드 서치와 유사하지만 파라미터 간격을 지정하기 어려울경우 사용->확률분포를 전달
+
+둘다 파라미터는 같음, 상황에 따라 둘 중 하나만 쓰면 됨
+ex) 
+ridge = Ridge()
+param_grid = {'alpha': [0.01, 0.1, 1, 10, 100]}
+grid = GridSearchCV(ridge, param_grid, cv=5, scoring='neg_mean_squared_error')
+# 모델, 파라미터, 폴드수, 손실값
+cv=5 or 10주로 사용 : 데이터셋을 몇 조각(fold)으로 나눌지
+scoring: 
+        -회귀: 'neg_mean_squared_error'(mse) or 'r2'(default)
+        -분류: 'accuracy'(default) or 'f1', 'precision', 'recall'
