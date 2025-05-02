@@ -199,3 +199,6 @@ cv=5 or 10주로 사용 : 데이터셋을 몇 조각(fold)으로 나눌지-> 교
 scoring: 
         -회귀: 'neg_mean_squared_error'(mse) or 'r2'(default)
         -분류: 'accuracy'(default) or 'f1', 'precision', 'recall'
+
+이때 grid.predict와 model=grid.best_estimator_하고 model.predict는 같음!!!!!
+ 그냥 model로 명명해주냐 안해주냐의 차이
