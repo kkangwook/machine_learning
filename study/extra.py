@@ -242,16 +242,15 @@ data ->x,y -> train,test분리 -> dt=DecisionTreeClassifier(max_depth=k, random_
 
 
 2. 교차검증과 최적의 파라미터 찾기
-from sklearn.model_selection import cross_validate
-from sklearn.model_selection import GridSearchCV
-from sklearn.model_selection import RandomizedSearchCV
 
 -cross-validate
+from sklearn.model_selection import cross_validate
 train세트에서 굳이 검증세트 나눌 필요 없음 -> dt새로 만들기(.fit안하기)
--> score=cross_validate(dt,x_train,y_train,cv=5 or 10(fold), return_train_score=True)
+-> score=cross_validate(dt,x_train,y_train,cv=5 or 10(fold), return_train_score=True) #자동으로 fit기능 존재
 ->그냥 print(score)하면 cv개수별로 다보여줌 -> np.mean(scores['train_score']), np.mean(scores['test_score'])
 
 -grid search
+from sklearn.model_selection import GridSearchCV
 train세트와 새로운 dt(random_state=123)준비-> 파라미터 준비: dt의 경우 params={'min_impurity_decrease':np.arange(0.0001,0.001,0.0001),
  'max_depth':range(5,20,1),'min_samples_split':range(2,100,10)}
 -> gs=GridSearchCV(dt,params,n_jobs=-1, cv=5 or 10) ->서치수행 by gs.fit(x_train,y_train)
@@ -259,6 +258,7 @@ train세트와 새로운 dt(random_state=123)준비-> 파라미터 준비: dt의
 -> best_dt=gs.best_estimator_ (최적 조건 적용된 모델)-> best_dt.score, predict가능
 
 - randomized search cv
+from sklearn.model_selection import RandomizedSearchCV
 train세트와 dt(random_state=123)준비->from scipy.stats import randint, uniform필요: 간격 지정하기 어려워서
 ->params={'min_impurity_decrease':uniform(0.0001,0.001), #실수
        'max_depth':randint(20,50),     #정수
@@ -268,6 +268,21 @@ train세트와 dt(random_state=123)준비->from scipy.stats import randint, unif
 -> 서치수행 by gs.fit(x_train,y_train)-> gs.best_params_, np.max(gs.cv_results_['mean_test_score'])
 ->dt=gs.best_estimator_ -> dt.score(), dt.predict()
 
+
+3. 트리 앙상블: 결정트리여러개 모으기
+공통: data -> x,y ->train, test (정규화는 X)
+
+-랜덤포레스트: 샘플 랜덤, 특성 랜덤
+from sklearn.ensemble import RandomForestClassifier
+rf=RandomForestClassifier(n_estimators=100(default->100개의 트)n_jobs=-1,random_state=123, oob_score=True) #부트스트랩에 포함되지 않은 데이터(OOB)를 검증세트로써 사용하는 기능도 존재
+->scores=cross_validate(rf, x_train, y_train, return_train_score=True, n_jobs=-1)-> print(score)
+->학습하기 rf.fit(x_train,y_train)-> rf.feature_importances, rf.oob_score_->rf.score, rf.predict
+
+- 엑스트라 트리: 전체 데이터 사용+ 특성랜덤+ 분할기준 랜덤
+from sklearn.ensemble import ExtraTreesClassifier
+et=ExtraTreesClassifier(n_jobs=-1,random_state=123) -> scores=cross_validate(et,x_train,y_train, return_train_score=True, n_jobs=-1)
+-> np.mean(scores['train_score']), np.mean(scores['test_score']) -> et.fit() -> et.feature_importances_
+-> et.score, et.predict
 
 
 
