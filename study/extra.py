@@ -185,3 +185,4 @@ from sklearn.linear_model import SGDClassifier
 트리: 비선형적, 복잡한데이터에 많이 사용, 시각화 쉬움, 과적합에 매우 취약
 
 -grid search사용할줄알면 이미 cross-validate기능도 포함하기 때문에 cross-validate따로 사용할 필요X
+  : sklearn의 거의 모든 모델에 사용 가능
