@@ -184,6 +184,8 @@ from sklearn.linear_model import SGDClassifier
 로지스틱 회귀 분류: 빠름, 데이터 특성이 선형적일때 사용, 과적합에 덜 민감, 복잡한 관계는 잘 못잡아냄
 트리: 비선형적, 복잡한데이터에 많이 사용, 시각화 쉬움, 과적합에 매우 취약
 
+--cross validate나 grid/randomized search는 자체적으로 .fit하기 때문에 사전에 fit할 필요 없음
+
 -grid search사용할줄알면 이미 cross-validate기능도 포함하기 때문에 cross-validate따로 사용할 필요X
   :파라미터 세세히 정의 필요
   : sklearn의 거의 모든 모델에 사용 가능
