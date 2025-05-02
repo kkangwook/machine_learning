@@ -224,7 +224,7 @@ ex) param_grid = {'alpha': [1.0]}
     경사하강법과 유사: 학습률을 정해주고 결정트리를 계속 추가해 가면서 가장 낮은곳으로 이동하는 방식
 
 -히스토그램 기반 그레디언트 부스팅: 미리 특성에 따른 샘플들 히스토그램 그려서 분할후보를 찾음
-     특성은 각 특성값 당 256개의 bin으로 나 
+     특성은 각 특성값 당 256개의 bin으로 나눔눔
 
 
 
@@ -271,6 +271,8 @@ train세트와 dt(random_state=123)준비->from scipy.stats import randint, unif
 
 3. 트리 앙상블: 결정트리여러개 모으기
 공통: data -> x,y ->train, test (정규화는 X)
+!!!!!모든 모델 공통적으로 max_depth, min_samples_split, min_samples_leaf, min_impurity_decrease
+  -> grid나 randomized search사용가능
 
 -랜덤포레스트: 샘플 랜덤, 특성 랜덤
 from sklearn.ensemble import RandomForestClassifier
@@ -280,9 +282,31 @@ rf=RandomForestClassifier(n_estimators=100(default->100개의 트)n_jobs=-1,rand
 
 - 엑스트라 트리: 전체 데이터 사용+ 특성랜덤+ 분할기준 랜덤
 from sklearn.ensemble import ExtraTreesClassifier
-et=ExtraTreesClassifier(n_jobs=-1,random_state=123) -> scores=cross_validate(et,x_train,y_train, return_train_score=True, n_jobs=-1)
+et=ExtraTreesClassifier(n_jobs=-1,random_state=123, n_estimators=100(디폴트)) -> scores=cross_validate(et,x_train,y_train, return_train_score=True, n_jobs=-1)
 -> np.mean(scores['train_score']), np.mean(scores['test_score']) -> et.fit() -> et.feature_importances_
 -> et.score, et.predict
 
+- 그레디언트 부스팅: 경사하강법으로 낮은 depth 여러tree 모음
+from sklearn.ensemble import GradientBoostingClassifier
+gb=GradientBoostingClassifier(random_state=123) -> scores=cross_validate(gb,x_train,y_train, return_train_score=True, n_jobs=-1)
+-> np.mean(scores['train_score']), np.mean(scores['test_score']) 
+-> 트리 더모으기 gb=GradientBoostingClassifier(n_estimators=500,learning_rate=0.2,random_state=123)
+-> 다시 교차검증 후 score-> gb.fit -> gb.feature_importances_ -> gb.score, gb.predict
+
+-히스토그램 그레디언트 부스팅: 특성 미리 256의 bin으로 나눠 히스토그램으로-> 최적 분할후보 찾음
+from sklearn.ensemble import HistGradientBoostingClassifier
+hgb=HistGradientBoostingClassifier(random_state=123) -> 교차검증 후 score ->hgb.fit
+-> 중요도 보기: from sklearn.inspection import permutation_importance
+-> result=permutation_importance(hgb,x_train,y_train, n_repeats=10, random_state=123, n_jobs=-1) #n_repeats는 랜덤하게 섞을 횟수/원래 디폴트값은 5
+-> result.importances_mean ->hgb.score, hgb.predict
 
 
+4. 랜덤포레스트로 다중분류 해보기
+#데이터 준비
+from sklearn.datasets import load_iris
+data = load_iris()
+X = data.data
+y = data.target
+->train, test로 나누기 -> rf = RandomForestClassifier(n_estimators=100,max_depth=10, random_state=42)
+-> rf.fit(X_train, y_train) -> rf.score(X_train,y_train), rf.score(X_test,y_test)
+-> rf.feature_importances -> rf.predict(x_test)
