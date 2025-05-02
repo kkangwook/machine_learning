@@ -195,7 +195,7 @@ ridge = Ridge()
 param_grid = {'alpha': [0.01, 0.1, 1, 10, 100]}
 grid = GridSearchCV(ridge, param_grid, cv=5, scoring='neg_mean_squared_error')
 # 모델, 파라미터, 폴드수, 손실값
-cv=5 or 10주로 사용 : 데이터셋을 몇 조각(fold)으로 나눌지
+cv=5 or 10주로 사용 : 데이터셋을 몇 조각(fold)으로 나눌지-> 교차검증 수행
 scoring: 
         -회귀: 'neg_mean_squared_error'(mse) or 'r2'(default)
         -분류: 'accuracy'(default) or 'f1', 'precision', 'recall'
