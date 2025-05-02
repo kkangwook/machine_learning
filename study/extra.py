@@ -202,3 +202,6 @@ scoring:
 
 이때 grid.predict와 model=grid.best_estimator_하고 model.predict는 같음!!!!!
  그냥 model로 명명해주냐 안해주냐의 차이
+
+교차검증용만으로 그리드서치 쓸거면 최소 파라미터 하나는 들어가야됌!!!!!
+ex) param_grid = {'alpha': [1.0]}
