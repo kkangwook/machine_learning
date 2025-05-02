@@ -48,7 +48,7 @@ from sklearn.linear_model import Ridge, Lasso
 ->  plt.plot(np.log10(alpha_list),train_score/test_score) 그리고 제일 가까운 값 확인
 -> 그 alpha로 .fit  ->np.sum(.coef_==0)로 몇개 차원 없어졌는지 확인  ->.score  ->.predict(poly+ss_data)
 
-
+------------------------------------------------------------------------------------------------------------
 
 #2. classification
 
@@ -178,7 +178,7 @@ from sklearn.linear_model import SGDClassifier
 ->sc.decision_function, softmax로 위의 확률과 비교
 
 
-
+-------------------------------------------------------------------------------------------
 
 #3. 트리
 로지스틱 회귀 분류: 빠름, 데이터 특성이 선형적일때 사용, 과적합에 덜 민감, 복잡한 관계는 잘 못잡아냄
@@ -225,3 +225,49 @@ ex) param_grid = {'alpha': [1.0]}
 
 -히스토그램 기반 그레디언트 부스팅: 미리 특성에 따른 샘플들 히스토그램 그려서 분할후보를 찾음
      특성은 각 특성값 당 256개의 bin으로 나 
+
+
+
+#사용법
+
+!! 정규화는 필요X(분할기준이 특성하나씩만사용+ 비율에 따라 분할하기때문)
+
+
+1. 결정트리
+from sklearn.tree import DecisionClassifier
+data ->x,y -> train,test분리 -> dt=DecisionTreeClassifier(max_depth=k, random_state=123) -> dt.fit -> dt.score
+-> dt.feature_importances_로 특성 중요도 -> 트리형상화: from sklearn.tree import plot_tree
+-> plt.figure + plot_tree(dt,max_depth=k, filled=True, feature_names=['a','b','c'])+plt.show
+-> 해석하기: gini란? -> 분할기준은?-> 분류기준은?
+
+
+2. 교차검증과 최적의 파라미터 찾기
+from sklearn.model_selection import cross_validate
+from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import RandomizedSearchCV
+
+-cross-validate
+train세트에서 굳이 검증세트 나눌 필요 없음 -> dt새로 만들기(.fit안하기)
+-> score=cross_validate(dt,x_train,y_train,cv=5 or 10(fold), return_train_score=True)
+->그냥 print(score)하면 cv개수별로 다보여줌 -> np.mean(scores['train_score']), np.mean(scores['test_score'])
+
+-grid search
+train세트와 새로운 dt(random_state=123)준비-> 파라미터 준비: dt의 경우 params={'min_impurity_decrease':np.arange(0.0001,0.001,0.0001),
+ 'max_depth':range(5,20,1),'min_samples_split':range(2,100,10)}
+-> gs=GridSearchCV(dt,params,n_jobs=-1, cv=5 or 10) ->서치수행 by gs.fit(x_train,y_train)
+-> gs.best_params_ (최적 매개변수), gs.cv_results['mean_test_score'] (검증점수)
+-> best_dt=gs.best_estimator_ (최적 조건 적용된 모델)-> best_dt.score, predict가능
+
+- randomized search cv
+train세트와 dt(random_state=123)준비->from scipy.stats import randint, uniform필요: 간격 지정하기 어려워서
+->params={'min_impurity_decrease':uniform(0.0001,0.001), #실수
+       'max_depth':randint(20,50),     #정수
+       'min_samples_split':randint(2,25),
+       'min_samples_leaf':randint(1,25)}
+->gs=RandomizedSearchCV(dt,params,n_iter=100,n_jobs=-1,random_state=123) #랜덤하게 파라미터 조합 100개 뽑아 이중 최적찾음
+-> 서치수행 by gs.fit(x_train,y_train)-> gs.best_params_, np.max(gs.cv_results_['mean_test_score'])
+->dt=gs.best_estimator_ -> dt.score(), dt.predict()
+
+
+
+
