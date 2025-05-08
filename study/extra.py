@@ -1,3 +1,6 @@
+sklearn의 random_state는 지정한 값에 따라 동일한 샘플일경우 전세계 어디의 누구든 같은 값이 나오게 함
+
+
 
 # 1.regression
 
