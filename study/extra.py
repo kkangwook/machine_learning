@@ -348,7 +348,71 @@ y = data.target
 ->k개 지점 랜덤하게 정하고 이 지점에 가까운 샘플을 하나의 클러스터로->각 클러스터 평균값을 중심으로 정함
 ->이 중심을 지점으로 다시 가까운 샘플들->클러스터안의 샘플들이 더이상 변화가 없을때 종료
 
+# 주성분 분석 PCA
+주성분이란 데이터를 그렸을때 분산(퍼짐)이 큰 방향or 벡터
+주성분의 개수는 특성의 개수까지 가능-> 이 중 가장 큰 주성분부터 표현
+이 그림은 1차원화해서 (10000,)벡터이므로 차원개수=특성개수는10000->가능한 주성분도 10000개
+
+
 1. 군집화-Kmeans
 fruits_300.npy 배열 사용->불러오기-> 사이즈보기(100,100)짜리가 300개 샘플-> 최소/최대값보기 
 -> 첫번째 그림 cmap='gray'로 흑백사진보기(흰색일수록 숫자값큼)-> gray_r로 색반전
-->0~99는 사과, 100~199는 파인애플, 200~299는 바나나 
+->0~99는 사과, 100~199는 파인애플, 200~299는 바나나 -> from sklearn.cluster import KMeans
+-> km=KMeans(n_clusters=k, random_state=123) ->fruits_2d=fruits.reshape(-1,100*100)로 2차원화
+-> kn.fit(fruits_2d) -> km.labels_로 군집확인 -> np.unique(km.labels_,return_counts=True) 로 클러스터별 개수 확인
+-> 이미지 그리는 함수 만들기 
+def draw_fruits(arr,ratio=1):   #arr에 3차원배열인 fruits를 입력받음
+    n=len(arr)     #layer개수=3차원개수=샘플개수
+    rows=int(np.ceil(n/10))  #한줄에 10개씩 그리기/ rows는 세로개수
+    cols=n if rows<2 else 10    #만약 1줄이하면 열의 개수는 샘플개수/ 2줄 이상이면 각 열은 10개씩
+
+    fig, axes=plt.subplots(rows,cols,figsize=(cols*ratio,rows*ratio), squeeze=False)
+    for i in range(rows):
+        for j in range(cols):
+            if i*10+j<n:    #i*10+j는 0,1,2,...,298,299->0에서299까지 그리겠다
+                axes[i,j].imshow(arr[i*10+j],cmap='gray_r')
+            axes[i,j].axis('off')
+    plt.show()
+하고 draw_fruits(fruits[km.labels_==0]) 이런식으로 집어넣음
+-> km.cluster_centers_로 각 클러스터별 평균 확인 -> draw_fruits(km.cluster_centers_.reshape(-1,100,100),ratio=3)로 그림
+-> km.transform(fruits_2d[100:101])으로 2차원 형태로 데이터 넣어줘서 해당 샘플의 모든 클러스터 중심까지의 거리 재기
+-> km.predict(fruits_2d[100:101])로 레이블 확인하고 그림그리기 -> km.n_iter_로 알고리즘 반복횟수 확인
+-> 최적의 k찾기
+inertia=[]
+for k in range(2,7):
+    km=KMeans(n_clusters=k, n_init='auto', random_state=123)
+    km.fit(fruits_2d)
+    inertia.append(km.inertia_)
+plt.plot(range(2,7),inertia) 해서 확꺽이는 부분이 최적의 k값
+
+--이미지 말고 다른 데이터--
+->fish데이터 사용해서 Kmeans하기-> x_test[:5]를 predict해서 label_값을 y_test[:5]와 비교해보기
+
+----클러스터로 나뉘는 기준 보는 법-------
+original_centers = ss.inverse_transform(kmeans.cluster_centers_)  #cluster_centers_를 복수 
+print(pd.DataFrame(original_centers, columns=df.columns[:-1]))  #각 그룹별 중심값이 보여짐
+
+2. 주성분 분석 PCA
+
+from sklearn.decomposition import PCA ->pca=PCA(n_components=50)   #10000차원을 50차원으로 줄임
+-> pca.fit(fruits_2d) 2차원으로 들어감 -> pca.components_로 주성분값 50개 확인 -> 3차원화 후 이미지로 나타내기
+-> fruits_pca=pca.transform(fruits_2d)로 차원축소 -> 얘를 km.fit하고 label_확인->차원축소전과 비교
+-> fruits_inverse=pca.inverse_transform(fruits_pca)로 다시 원본데이터와 유사한 형태로
+-> inverse를 3차원화하고 이미지화해서 보기 -> pca.explained_variance_ratio_ 로 주성분이 분산을 얼마나 잘나타내는지보기
+-> np.sum으로 1에 얼만큼 가까운지 보기 -> plt.plot으로 초반 몇개의 주성분이 대부분의 분산을 표현하는지보기
+-> 최고의 효율나타내는 n_components개수 찾기: pca=PCA(n_components=0.5) 비율로 나타내 np.sum(분산)이 0.5되는 최소의 n_components개수 찾기
+-> pca.fit(fruits_2d) -> pca.n_components_하면 개수 알려줌 -> 그냥 이 pca 그대로 써도됌 fruits_pca=pca.transform(fruits_2d)
+-> 무려 2개의 차원으로도 50%까지 표현할 수 있음 -> 이 fruits_pca로 kmeans에 적용
+-> 차원2~3개면 scatter플롯으로도 그리기 가능:
+for label in range(0,3):
+    data=fruits_pca[km.labels_==label]
+    plt.scatter(data[:,0],data[:,1])   #[:,0]은 첫번째 주성분으로 x축에, [:,1]는 두번째 주성분으로 y축에
+plt.legend(['banana','apple','pineapple'])
+plt.show()
+
+다른 모델에도 적용
+정답 y값: answer=np.array([0]*100+[1]*100+[2]*100)   #0은 사과, 1인 파인애플, 2는 바나나
+->lr=LogisticRegression()
+->scores=cross_validate(lr,fruits_2d,answer) 하고 np.mean(scores['test_score']),np.mean(scores['fit_time'])확인
+->pca한 fruit사진도 cv로 ->np.mean(scores['test_score']),np.mean(scores['fit_time']) 확인
+-> 정확도는 비슷한데 시간이 확실히 많이 줄어듬
