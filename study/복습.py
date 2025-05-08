@@ -28,6 +28,7 @@ from sklearn.neighbors import KNeighborsRegressor
 -농어 그래프로일단 그려서 분포확인
 -데이터 전처리
 -KNeighborsRegressor학습->R^2확인->과대/과소적합 확인->모델 변경->다시 학습후 확인->[20,50]을 예측->얘들의 이웃확인->전체(파),이웃(빨),데이터는(주)로 그래프
+--!!!!그리드나 랜덤서치 사용도해보기!!!!---
 
 2. linear regression
 from sklearn.linear_model import LinearRegression
@@ -39,6 +40,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import Ridge, Lasso
 -위의 perch_3v 5degree그대로 사용->최적의 파라미터찾기(그래프 그려서)->그걸로 학습->R^2확->계수몇개가 0됐는지-> test_3v평균낸 데이터로 예측
 - 릿지 라쏘 둘다보기
+--!!!!그리드나 랜덤서치 사용도해보기!!!!---
 
 
 #2. classification
@@ -63,6 +65,7 @@ from sklearn.linear_model import LogisticRegression
 -fish 데이터 전처리 후 lr학습(규제와 횟수 정해서)->R^2비교-> 선형방정식 보기
 - test[:5]의 클래스값, 예측값, 확률값보기
 - z값, 출력 함수를 통한 확률값 구하기
+--!!!!그리드나 랜덤서치 사용도해보기!!!!---
 
 3. 확률적 경사 하강법(Stochastic Gradient Descent)
 from sklearn.linear_model import SGDClassifier
@@ -76,6 +79,7 @@ data={'Species':['King']*20,
      'Width':np.random.randint(5,7,20)}
 newfish=pd.DataFrame(data)
 클래스값, 예측값, 확률값보기- z값, 함수를 통한 확률값 구하기
+--!!!!그리드나 랜덤서치 사용도해보기!!!!---
 
 
 #3. tree
