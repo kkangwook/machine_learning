@@ -336,3 +336,9 @@ y = data.target
 ->train, test로 나누기 -> rf = RandomForestClassifier(n_estimators=100,max_depth=10, random_state=42)
 -> rf.fit(X_train, y_train) -> rf.score(X_train,y_train), rf.score(X_test,y_test)
 -> rf.feature_importances -> rf.predict(x_test)
+
+
+
+-----------------------------------------------------------------------------------------
+# 군집화
+-kmeans는 n_iter_횟수만큼 여러번 반복하여 최적의 중심지를 찾음
