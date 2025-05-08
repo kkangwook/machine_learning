@@ -301,6 +301,32 @@ hgb=HistGradientBoostingClassifier(random_state=123) -> 교차검증 후 score -
 -> result.importances_mean ->hgb.score, hgb.predict
 
 
+---------------rs사용버전----------------------
+params={'min_impurity_decrease':uniform(0.0001,0.001),
+       'max_depth':randint(10,50),
+       'min_samples_split':randint(2,25),
+       'min_samples_leaf':randint(1,25)}
+rf=RandomForestClassifier(random_state=123,n_estimators=200)
+rs=RandomizedSearchCV(rf,param_distributions=params,cv=5,n_iter=100,n_jobs=-1,random_state=123)
+rs.fit(x_train,y_train)
+rs.best_params_, np.max(rs.cv_results_['mean_test_score'])
+rf=rs.best_estimator_
+rf.feature_importances_
+
+
+hgb은 다른 파라미터
+params={'min_samples_leaf':randint(1,25),
+       'max_depth':randint(10,50),
+       'max_leaf_nodes':randint(10,50),
+       'learning_rate':uniform(0.1,0.2)}   #새로운 옵션
+hgc=HistGradientBoostingClassifier(random_state=123,max_iter=200)
+
+rs=RandomizedSearchCV(hgc,param_distributions=params,cv=5,n_iter=100,n_jobs=-1,random_state=123)
+rs.fit(x_train,y_train)
+rs.best_params_, np.max(rs.cv_results_['mean_test_score'])
+
+
+
 4. 랜덤포레스트로 다중분류 해보기
 #데이터 준비
 from sklearn.datasets import load_iris
