@@ -388,6 +388,9 @@ plt.plot(range(2,7),inertia) 해서 확꺽이는 부분이 최적의 k값
 --이미지 말고 다른 데이터--
 ->fish데이터 사용해서 Kmeans하기-> x_test[:5]를 predict해서 label_값을 y_test[:5]와 비교해보기
 
+----텍스트 데이터----
+전처리+tfidf화가 가장 적합
+
 ----클러스터로 나뉘는 기준 보는 법-------
 original_centers = ss.inverse_transform(kmeans.cluster_centers_)  #cluster_centers_를 복수 
 print(pd.DataFrame(original_centers, columns=df.columns[:-1]))  #각 그룹별 중심값이 보여짐
