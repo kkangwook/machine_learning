@@ -378,7 +378,7 @@ def draw_fruits(arr,ratio=1):   #arr에 3차원배열인 fruits를 입력받음
 -> km.transform(fruits_2d[100:101])으로 2차원 형태로 데이터 넣어줘서 해당 샘플의 모든 클러스터 중심까지의 거리 재기
 -> km.predict(fruits_2d[100:101])로 레이블 확인하고 그림그리기 -> km.n_iter_로 알고리즘 반복횟수 확인
 -> 최적의 k찾기
-inertia=[]
+inertia=[]  : 모든 거리의 합
 for k in range(2,7):
     km=KMeans(n_clusters=k, n_init='auto', random_state=123)
     km.fit(fruits_2d)
