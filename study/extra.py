@@ -358,7 +358,8 @@ y = data.target
 fruits_300.npy 배열 사용->불러오기-> 사이즈보기(100,100)짜리가 300개 샘플-> 최소/최대값보기 
 -> 첫번째 그림 cmap='gray'로 흑백사진보기(흰색일수록 숫자값큼)-> gray_r로 색반전
 ->0~99는 사과, 100~199는 파인애플, 200~299는 바나나 -> from sklearn.cluster import KMeans
--> km=KMeans(n_clusters=k, random_state=123) ->fruits_2d=fruits.reshape(-1,100*100)로 2차원화
+-> km=KMeans(n_clusters=k, random_state=123, n_init=10) # n_init은 첫 중심지를 랜덤하게 10곳으로 해서 10번의 시행중 
+가장 낮은 inertia가 나오는 결과를 불러옴 ->fruits_2d=fruits.reshape(-1,100*100)로 2차원화
 -> kn.fit(fruits_2d) -> km.labels_로 군집확인 -> np.unique(km.labels_,return_counts=True) 로 클러스터별 개수 확인
 -> 이미지 그리는 함수 만들기 
 def draw_fruits(arr,ratio=1):   #arr에 3차원배열인 fruits를 입력받음
