@@ -405,6 +405,7 @@ from sklearn.decomposition import PCA ->pca=PCA(n_components=50)   #10000차원�
 -> inverse를 3차원화하고 이미지화해서 보기 -> pca.explained_variance_ratio_ 로 주성분이 분산을 얼마나 잘나타내는지보기
 -> np.sum으로 1에 얼만큼 가까운지 보기 -> plt.plot으로 초반 몇개의 주성분이 대부분의 분산을 표현하는지보기
 -> 최고의 효율나타내는 n_components개수 찾기: pca=PCA(n_components=0.5) 비율로 나타내 np.sum(분산)이 0.5되는 최소의 n_components개수 찾기
+  이때 보통 0.9정도로 하기는 함
 -> pca.fit(fruits_2d) -> pca.n_components_하면 개수 알려줌 -> 그냥 이 pca 그대로 써도됌 fruits_pca=pca.transform(fruits_2d)
 -> 무려 2개의 차원으로도 50%까지 표현할 수 있음 -> 이 fruits_pca로 kmeans에 적용
 -> 차원2~3개면 scatter플롯으로도 그리기 가능:
