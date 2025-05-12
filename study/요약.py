@@ -1,11 +1,15 @@
 
-tree하고 앙상블말고 전부 정규화 필요
-x들어갈때 2차원으로 !!!
-선형모델에서 정답과 변수의 상관계수가 절대값0.2 미만이면 안써도 됌-> but!! 트리모델의 경우는 비선형성이므로 사용가능
+-tree하고 앙상블은 정규화필요X, ss는 주로 머신러닝에, minmax는 주로 딥러닝에
+-x들어갈때 2차원으로 !!!
+-선형모델에서 정답과 변수의 상관계수가 절대값0.2 미만이면 안써도 됌-> but!! 트리모델의 경우는 비선형성이므로 사용가능
     by df.corr()
-로그 스케일화는 하나의 컬럼안의 값의 차이가 클때 함/ standardscaler는 다양한 컬럼들 사이값의 차이가 크지 않게 하기 위해 함
+-로그 스케일화는 하나의 컬럼안의 값의 차이가 클때 함/ standardscaler는 다양한 컬럼들 사이값의 차이가 크지 않게 하기 위해 함
+    ->로그 스케일 후에 정규화(StandardScaler 등)를 함께 사용하는 경우는 꽤 많음
+-x값은 레이블인코딩하기 위험한데(값이 클수록 의미를 가지게됨) y값은 레이블 인코딩해도 상관없음
+    ->y를 인코딩한다->분류문제다->클래스로 인식되므로 숫자크기에 의미는 없음
 
-from scipy.stats import randint, uniform, loguniform
+
+from scipy.stats import randint, uniform, loguniform, bernoulli
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.preprocessing import LabelEncoder
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -92,7 +96,12 @@ from sklearn.feature_extraction.text import TfidfVectorizer
           'max_iter': [100, 200, 500, 1000],}  # 최대 반복 횟수 epoch
       -sc.partial_fit, sc.coef_, sc.intercept_, sc.classes_, sc.predict_proba, z=sc.decision_function
 
-    -- 1-2-4 
+    -- 1-2-4 from sklearn.naive_bayes import MultinomialNB
+        x는 tfidf형태로 들어감!!!!!
+        param_dist = {'alpha': loguniform(1e-3, 1e3),  # alpha는 0.001과 1000 사이에서 loguniform 분포
+                      'fit_prior': bernoulli(0.5)}  # fit_prior는 True/False를 균등한 확률로 샘플링
+        - nb.predict_proba(x_test), nb.classes_, nb.coef_
+
 
     -- 1-3-1 from sklearn.tree import DecisionTreeClassifier 
             dt=DecisionTreeClassifier(random_state=123)
