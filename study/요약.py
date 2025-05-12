@@ -1,7 +1,8 @@
 
 tree하고 앙상블말고 전부 정규화 필요
 x들어갈때 2차원으로 !!!
-선형모델에서 정답과 변수의 상관계수가 0.2미만이면 안써도 됌-> but!! 트리모델의 경우는 비선형성이므로 사용가능
+선형모델에서 정답과 변수의 상관계수가 절대값0.2 미만이면 안써도 됌-> but!! 트리모델의 경우는 비선형성이므로 사용가능
+    by df.corr()
 from scipy.stats import randint, uniform, loguniform
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
