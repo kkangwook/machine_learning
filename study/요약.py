@@ -182,3 +182,41 @@ def draw_fruits(arr,ratio=1):   #arr에 3차원배열인 fruits를 입력받음
 
 
 3. 강화학습 
+
+
+
+-------------------------------------------------
+회귀분석용 데이터
+from sklearn import datasets
+
+--iris = datasets.load_iris()
+x = iris.data # x변수 
+y = iris.target # y변수
+print(iris.feature_names)# ['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)']
+print(iris.target_names) # ['setosa' 'versicolor' 'virginica']
+iris_df = pd.DataFrame(x, columns=iris.feature_names) # X변수 대상 
+iris_df['species'] = iris.target #y변수 추가
+
+--diabetes = datasets.load_diabetes()
+
+--from sklearn.datasets import fetch_california_housing
+california = fetch_california_housing()
+print(california.DESCR)
+
+# X변수 -> DataFrame 변환 
+cal_df = pd.DataFrame(california.data, columns=california.feature_names)
+# y변수 추가 
+cal_df["MEDV"] = california.target
+
+분류용 데이터
+-from sklearn.datasets import load_wine
+wine = load_wine()
+
+-from sklearn.datasets import load_breast_cancer
+cancer = load_breast_cancer()
+
+-from sklearn.datasets import load_digits #숫자이미지
+digits = load_digits()
+
+-from sklearn.datasets import fetch_20newsgroups
+newsgroups = fetch_20newsgroups(subset='all') # 'train', 'test'
