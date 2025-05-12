@@ -12,32 +12,36 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler
 0-2. PCA
 
 1. 지도학습: x,y
-  ---#회귀: 연속숫자형x와 연속숫자형 y, 
+  --- 1-1 #회귀: 연속숫자형x와 연속숫자형 y, 
       #출력함수 따로 없음
   --손실함수: MSE(mean squared error)- np.mean((y-y_pred)**2)
      from sklearn.metrics import mean_squared_error as mse -> mse(y_true,y_pred) 
   --#scoring: 
       .score(x,y)로 R^2계수
 
-  -- from sklearn.neighbors import KNeighborsRegressor
+  -- 1-1-1 from sklearn.neighbors import KNeighborsRegressor
+            knr=KNeighborsRegressor()
       -#하이퍼파리미터: 
        params={'n_neighbors':randint(1,100)}  
       -dist, index=knr.kneigbors(x_test[:5])
 
-  --from sklearn.linear_model import LinearRegression
+  -- 1-1-2 from sklearn.linear_model import LinearRegression
+            lr=LinearRegression()
       -#하이퍼파라미터 하나: 
         parmas={'positive'=True}  #시 회귀 계수를 양수로 강제(비용, 수량 등 음수가 말이 안 되는 변수에 유용)
       -lr.coef_, lr.intercept_
 
-  --from sklearn.linear_model import Ridge, Lasso
+  -- 1-1-3 from sklearn.linear_model import Ridge, Lasso
+            r=Ridge(), l=Lasso(max_iter=n) #횟수 늘어날수록 warning안뜸
       from sklearn.preprocessing import PolynomialFeatures(degree=n) #사용 후 정규화
+        poly.get_feature_names_out()
       -#하이퍼파라미터: 
         params={'alpha': loguniform(1e-4, 1e2)} #->지수단위로 균등하게
       -rl.coef_, rl.intercept_, rl.coef==0
 
 
 
-  ---#분류: x는 연속숫자 및 원핫인코딩-레이블인코딩-bow-tfidf전부 가능
+  --- 1-2 #분류: x는 연속숫자 및 원핫인코딩-레이블인코딩-bow-tfidf전부 가능
         # y클래스는 정수(레이블인코딩), 문자열, [T/F], [[1, 0, 1], [0, 1, 1]]과 같은 중복클래스를 같는 다중레이블 가능   
         # 출력함수: 이진분류=시그모이드(scipy.special.expit), 다중분류=softmax(scipy.special.softmax)
     --#손실함수: 이진=log_loss(cross-entropy), 다중= Categorical Cross Entropy
@@ -48,24 +52,28 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler
     from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score,confusion_matrix, log_loss
           function(y_true,y_pred)로 사용
     
-    -- from sklearn.neighbors import KNeighborsClassifier
+    -- 1-2-1 from sklearn.neighbors import KNeighborsClassifier
+            kn=KNeighborsClassifier()
       -#하이퍼파라미터
         params = {'n_neighbors': randint(1, 31)}
       - kn.classes_, kn.predict_proba
 
-    -- from sklearn.linear_model import LogisticRegression
+    -- 1-2-2 from sklearn.linear_model import LogisticRegression
+            lr=LogisticRegression(max_iter=k) #최적화를 위한 epoch횟수
       -#하이퍼파라미터
         params={'C': loguniform(1e-6, 1e+6)}  #큰 규제~작은규제
       - lr.coef_, lr.intercept_, lr.classes_, lr.predict_proba, z=lr.decision_function 
 
-    -- from sklearn.linear_model import SGDClassifier
+    -- 1-2-3 from sklearn.linear_model import SGDClassifier
+            sc=SGDClassifier(loss='log_loss', random_state=123, tol=None, n_jobs=-1)
       -#하이퍼파라미터:
         params = {'alpha': loguniform(1e-6, 1e+1),  # 정규화 강도=규제
-          'loss': ['hinge', 'log', 'modified_huber', 'squared_hinge', 'perceptron'],  # 손실 함수
+          'loss': ['hinge', 'log_loss', 'modified_huber', 'squared_hinge', 'perceptron'],  # 손실 함수
           'max_iter': [100, 200, 500, 1000],}  # 최대 반복 횟수 epoch
       -sc.partial_fit, sc.coef_, sc.intercept_, sc.classes_, sc.predict_proba, z=sc.decision_function
 
-    -- from sklearn.tree import DecisionClassifier
+    -- 1-3-1 from sklearn.tree import DecisionTreeClassifier 
+            dt=DecisionTreeClassifier(random_state=123)
       -# 하이퍼파라미터:
         params={'min_impurity_decrease':uniform(0.0001,0.001),
        'max_depth':randint(10,50),
@@ -73,7 +81,8 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler
        'min_samples_leaf':randint(1,25)}
       - dt.feature_importances_, from sklearn.tree import plot_tree(dt,max_depth=k, filled=True, feature_names=['a','b','c'])
 
-    -- from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
+    -- 1-3-2 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
+            re=Ran/Ext(n_estimators=k,n_jobs=-1,random_state=123) # k개의 트리
       -# 하이퍼파라미터:
         params={'min_impurity_decrease':uniform(0.0001,0.001),
        'max_depth':randint(10,50),
@@ -81,7 +90,8 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler
        'min_samples_leaf':randint(1,25)}
       - re.feature_importances
 
-    -- from sklearn.ensemble import GradientBoostingClassifier
+    -- 1-3-3 from sklearn.ensemble import GradientBoostingClassifier
+            gb=GradientBoostingClassifier(n_estimators=k,random_state=123) # k개의 트리
       -# 하이퍼파라미터:
         params={'min_impurity_decrease':uniform(0.0001,0.001),
        'max_depth':randint(10,50),
@@ -90,7 +100,8 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler
        'learning_rate':uniform(0.05,0.2)}
       -gb.feature_importances
 
-    -- from sklearn.ensemble import HistGradientBoostingClassifier
+    -- 1-3-4 from sklearn.ensemble import HistGradientBoostingClassifier
+            hgb=HistGradientBoostingClassifier(random_state=123,max_iter=k) # k개 트리리
         -# 하이퍼파라미터:
             params={'min_samples_leaf':randint(1,25),
                      'max_depth':randint(10,50),
@@ -118,5 +129,8 @@ def draw_fruits(arr,ratio=1):   #arr에 3차원배열인 fruits를 입력받음
             axes[i,j].axis('off')
     plt.show()
 
-  ---군집화 2차원 데이터로 x값만
+  --- 2 #군집화 2차원 데이터로 x값만
+    -- 2-1 from sklearn.cluster import KMeans
+
+
 3. 강화학습 
