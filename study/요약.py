@@ -113,8 +113,8 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler
             -> result.importances_mean ->hgb.score, hgb.predict
 
 
-2. 비지도학습: only x
-  
+2. 비지도학습: # only x: 정형데이터- 수치형or 원핫인코딩, 텍스트-tfidf, 이미지-벡터형태를 2차원화 
+               # 출력함수 없음, 손실함수도 딱히 없음 (KMeans에서는 inertia의 최소값) 
    -이미지 그리는 함수:
 def draw_fruits(arr,ratio=1):   #arr에 3차원배열인 fruits를 입력받음
     n=len(arr)     #layer개수=3차원개수=샘플개수
@@ -131,6 +131,10 @@ def draw_fruits(arr,ratio=1):   #arr에 3차원배열인 fruits를 입력받음
 
   --- 2 #군집화 2차원 데이터로 x값만
     -- 2-1 from sklearn.cluster import KMeans
+            km=KMeans(n_clusters=k, random_state=123, n_init=10)  #search불가
+            #-> km.inertia_ 엘보우 굽어질때를 최적의 k로
+        - km.labels_, km.cluster_centers_, km.inertia_, km.transform(f_2d[100:101)), km.n_iter_
+
 
 
 3. 강화학습 
