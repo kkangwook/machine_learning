@@ -3,12 +3,25 @@ tree하고 앙상블말고 전부 정규화 필요
 x들어갈때 2차원으로 !!!
 선형모델에서 정답과 변수의 상관계수가 절대값0.2 미만이면 안써도 됌-> but!! 트리모델의 경우는 비선형성이므로 사용가능
     by df.corr()
+
 from scipy.stats import randint, uniform, loguniform
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from sklearn.preprocessing import LabelEncoder
+from sklearn.feature_extraction.text import TfidfVectorizer
 
-0-1. **지도 학습**의 검증+최적의 파라미터
 
+0-1. **지도 학습**의 검증+최적의 파라미터(search는 따로 fit필요)
+    -- 0-1-1 from sklearn.model_selection import cross_validate
+            score=cross_validate(model,x_train,y_train,cv=5 or 10(fold), return_train_score=True)
+        -np.mean(scores['train_score']), np.mean(scores['test_score']), np.mean(score['fit_time'])
 
+    -- 0-1-2 from sklearn.model_selection import GridSearchCV
+            gs=GridSearchCV(model,param_grid=params,cv=5 or 10,n_jobs=-1)
+        -gs.fit, gs.best_params_, gs.cv_results['mean_test_score'], best=gs.best_estimator_, gs.score, gs.predict
+
+    --0-1-3 from sklearn.model_selection import RandomizedSearchCV
+            rs=RandomizedSearchCV(model,param_distributions=params,n_iter=k,n_jobs=-1,random_state=123) # 랜덤하게 파라미터 조합 k개 뽑아 이중 최적찾음
+        -rs.fit, rs.best_params_, np.max(rs.cv_results_['mean_test_score']), best=rs.best_estimator_,  rs.score, rs.predict
 0-2. PCA
 
 1. 지도학습: x,y
