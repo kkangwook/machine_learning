@@ -6,9 +6,10 @@ x들어갈때 2차원으로 !!!
 from scipy.stats import randint, uniform, loguniform
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
-0. **지도 학습**의 검증+최적의 파라미터
+0-1. **지도 학습**의 검증+최적의 파라미터
 
 
+0-2. PCA
 
 1. 지도학습: x,y
   ---#회귀: 연속숫자형x와 연속숫자형 y, 
@@ -59,13 +60,63 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
     -- from sklearn.linear_model import SGDClassifier
       -#하이퍼파라미터:
-        param_dist = {
-          'alpha': loguniform(1e-6, 1e+1),  # 정규화 강도=규제
+        params = {'alpha': loguniform(1e-6, 1e+1),  # 정규화 강도=규제
           'loss': ['hinge', 'log', 'modified_huber', 'squared_hinge', 'perceptron'],  # 손실 함수
           'max_iter': [100, 200, 500, 1000],}  # 최대 반복 횟수 epoch
       -sc.partial_fit, sc.coef_, sc.intercept_, sc.classes_, sc.predict_proba, z=sc.decision_function
 
-    --
+    -- from sklearn.tree import DecisionClassifier
+      -# 하이퍼파라미터:
+        params={'min_impurity_decrease':uniform(0.0001,0.001),
+       'max_depth':randint(10,50),
+       'min_samples_split':randint(2,25),
+       'min_samples_leaf':randint(1,25)}
+      - dt.feature_importances_, from sklearn.tree import plot_tree(dt,max_depth=k, filled=True, feature_names=['a','b','c'])
+
+    -- from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
+      -# 하이퍼파라미터:
+        params={'min_impurity_decrease':uniform(0.0001,0.001),
+       'max_depth':randint(10,50),
+       'min_samples_split':randint(2,25),
+       'min_samples_leaf':randint(1,25)}
+      - re.feature_importances
+
+    -- from sklearn.ensemble import GradientBoostingClassifier
+      -# 하이퍼파라미터:
+        params={'min_impurity_decrease':uniform(0.0001,0.001),
+       'max_depth':randint(10,50),
+       'min_samples_split':randint(2,25),
+       'min_samples_leaf':randint(1,25),
+       'learning_rate':uniform(0.05,0.2)}
+      -gb.feature_importances
+
+    -- from sklearn.ensemble import HistGradientBoostingClassifier
+        -# 하이퍼파라미터:
+            params={'min_samples_leaf':randint(1,25),
+                     'max_depth':randint(10,50),
+                     'max_leaf_nodes':randint(10,50),
+                     'learning_rate':uniform(0.1,0.2)}   #새로운 옵션
+            hgc=HistGradientBoostingClassifier(random_state=123,max_iter=200)
+        - 중요도 보기: from sklearn.inspection import permutation_importance
+            -> result=permutation_importance(hgb,x_train,y_train, n_repeats=10, random_state=123, n_jobs=-1) #n_repeats는 랜덤하게 섞을 횟수/원래 디폴트값은 5
+            -> result.importances_mean ->hgb.score, hgb.predict
+
+
 2. 비지도학습: only x
-  --군집화 
+  
+   -이미지 그리는 함수:
+def draw_fruits(arr,ratio=1):   #arr에 3차원배열인 fruits를 입력받음
+    n=len(arr)     #layer개수=3차원개수=샘플개수
+    rows=int(np.ceil(n/10))  #한줄에 10개씩 그리기/ rows는 세로개수
+    cols=n if rows<2 else 10    #만약 1줄이하면 열의 개수는 샘플개수/ 2줄 이상이면 각 열은 10개씩
+
+    fig, axes=plt.subplots(rows,cols,figsize=(cols*ratio,rows*ratio), squeeze=False)
+    for i in range(rows):
+        for j in range(cols):
+            if i*10+j<n:    #i*10+j는 0,1,2,...,298,299->0에서299까지 그리겠다
+                axes[i,j].imshow(arr[i*10+j],cmap='gray_r')
+            axes[i,j].axis('off')
+    plt.show()
+
+  ---군집화 2차원 데이터로 x값만
 3. 강화학습 
