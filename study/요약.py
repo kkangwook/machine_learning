@@ -3,6 +3,7 @@ tree하고 앙상블말고 전부 정규화 필요
 x들어갈때 2차원으로 !!!
 선형모델에서 정답과 변수의 상관계수가 절대값0.2 미만이면 안써도 됌-> but!! 트리모델의 경우는 비선형성이므로 사용가능
     by df.corr()
+로그 스케일화는 하나의 컬럼안의 값의 차이가 클때 함/ standardscaler는 다양한 컬럼들 사이값의 차이가 크지 않게 하기 위해 함
 
 from scipy.stats import randint, uniform, loguniform
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
@@ -22,7 +23,13 @@ from sklearn.feature_extraction.text import TfidfVectorizer
     --0-1-3 from sklearn.model_selection import RandomizedSearchCV
             rs=RandomizedSearchCV(model,param_distributions=params,n_iter=k,n_jobs=-1,random_state=123) # 랜덤하게 파라미터 조합 k개 뽑아 이중 최적찾음
         -rs.fit, rs.best_params_, np.max(rs.cv_results_['mean_test_score']), best=rs.best_estimator_,  rs.score, rs.predict
-0-2. PCA
+
+
+0-2. PCA: 2차원 배열로 들어감(주로 x값을 넣음)
+    -- from sklearn.decomposition import PCA 
+            pca=PCA(n_components=개수 or 비율)-> pca.fit(arr) -> arr_pca=pca.trasform(arr)
+        - pca.components_, data_inverse=pca.inverse_transform(data_pca), pca.explained_variance_ratio_, pca.n_components_
+
 
 1. 지도학습: x,y
   --- 1-1 #회귀: 연속숫자형x와 연속숫자형 y, 
@@ -84,6 +91,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
           'loss': ['hinge', 'log_loss', 'modified_huber', 'squared_hinge', 'perceptron'],  # 손실 함수
           'max_iter': [100, 200, 500, 1000],}  # 최대 반복 횟수 epoch
       -sc.partial_fit, sc.coef_, sc.intercept_, sc.classes_, sc.predict_proba, z=sc.decision_function
+
+    -- 1-2-4 
 
     -- 1-3-1 from sklearn.tree import DecisionTreeClassifier 
             dt=DecisionTreeClassifier(random_state=123)
