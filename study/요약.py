@@ -42,7 +42,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
         -rs.fit, rs.best_params_, np.max(rs.cv_results_['mean_test_score']), best=rs.best_estimator_,  rs.score, rs.predict
 
 
-0-2. PCA: 2차원 배열로 들어감(주로 x값을 넣음)
+0-2. PCA(polynomial과 반대->다중공선성 해결): 2차원 배열로 들어감(주로 x값을 넣음)
     -- from sklearn.decomposition import PCA 
             pca=PCA(n_components=개수 or 비율)-> pca.fit(arr) -> arr_pca=pca.trasform(arr)
         - pca.components_, data_inverse=pca.inverse_transform(data_pca), pca.explained_variance_ratio_, pca.n_components_
