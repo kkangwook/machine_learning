@@ -68,6 +68,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
         parmas={'positive'=True}  #시 회귀 계수를 양수로 강제(비용, 수량 등 음수가 말이 안 되는 변수에 유용)
       -lr.coef_, lr.intercept_
 
+--다중공선성 해결법-> 릿지, 라쏘 사용/ 다중공선성= 독립변수들 간에 강한 상호작용이 존재하는것--
+
   -- 1-1-3 from sklearn.linear_model import Ridge, Lasso
             r=Ridge(), l=Lasso(max_iter=n) #횟수 늘어날수록 warning안뜸
       from sklearn.preprocessing import PolynomialFeatures(degree=n) #사용 후 정규화
@@ -76,7 +78,17 @@ from sklearn.feature_extraction.text import TfidfVectorizer
         params={'alpha': loguniform(1e-4, 1e2)} #->지수단위로 균등하게
       -rl.coef_, rl.intercept_, rl.coef==0
 
+  -- 1-1-4 from statsmodels.formula.api import ols  #-> 통계값 볼 수 있음
+            df.columns  # ['x1', 'x2', 'x3', 'x4', 'y']
+            ols_obj = ols(formula='y ~ x1 + x2 + x3 + x4', data = df)
+            model = ols_obj.fit()
+            print(model.summary()) # p>|t|기 p-value값-> 0.05보다 크면 변수 안쓰는것도 고려
 
+        -다중공선성 진단
+            from statsmodels.stats.outliers_influence import variance_inflation_factor
+            exog = ols_obj.exog
+            for idx in range(1,k) : # k-1개의 독립변수
+                print(variance_inflation_factor(exog, idx)) #이 값이 10보다 큰 변수는 다중공선성 문제가 있다고 판단
 
   --- 1-2 #분류: x는 연속숫자 및 원핫인코딩-레이블인코딩-bow-tfidf전부 가능
         # y클래스는 정수(레이블인코딩), 문자열, [T/F], [[1, 0, 1], [0, 1, 1]]과 같은 중복클래스를 같는 다중레이블 가능   
