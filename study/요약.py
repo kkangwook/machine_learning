@@ -43,6 +43,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 0-2. PCA(polynomial과 반대->다중공선성 해결): 2차원 배열로 들어감(주로 x값을 넣음)
+    eigenvector와 비슷한 개념: eigenvalue값이 가장 큰 순서대로 주성분 우선적으로 가져옴
     -- from sklearn.decomposition import PCA 
             pca=PCA(n_components=개수 or 비율)-> pca.fit(arr) -> arr_pca=pca.trasform(arr)
         - pca.components_, data_inverse=pca.inverse_transform(data_pca), pca.explained_variance_ratio_, pca.n_components_
