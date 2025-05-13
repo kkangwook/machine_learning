@@ -111,13 +111,14 @@ from sklearn.feature_extraction.text import TfidfVectorizer
         params = {'n_neighbors': randint(1, 31)}
       - kn.classes_, kn.predict_proba
 
-    -- 1-2-2 from sklearn.linear_model import LogisticRegression
+    -- 1-2-2 from sklearn.linear_model import LogisticRegression #원래는 이진분류용
             lr=LogisticRegression(random_state=123) 
       -#하이퍼파라미터
         params={'C': loguniform(1e-6, 1e+6),  #큰 규제~작은규제
                 'max_iter':randint(100,1000), #경사하강법 횟수: 대용량이며 5000까지도 함
                 'penalty':['l1', 'l2', 'elasticnet', 'none'], #과적합규
                 'solver':['liblinear', 'saga']} #사용하는 알고리즘
+                multi_class='multinomial' #다중분류도 가능해짐
       - lr.coef_, lr.intercept_, lr.classes_, lr.predict_proba, z=lr.decision_function 
 
     -- 1-2-3 from sklearn.linear_model import SGDClassifier
