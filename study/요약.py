@@ -80,7 +80,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
   --- 1-2 #분류: x는 연속숫자 및 원핫인코딩-레이블인코딩-bow-tfidf전부 가능
         # y클래스는 정수(레이블인코딩), 문자열, [T/F], [[1, 0, 1], [0, 1, 1]]과 같은 중복클래스를 같는 다중레이블 가능   
-        # 출력함수: 이진분류=시그모이드(scipy.special.expit), 다중분류=softmax(scipy.special.softmax)
+        # 출력함수: 이진분류=시그모이드(scipy.special.expit)->0.5이상이면 클래스1로 예측/ 아니면 0으로 예측
+                  # 다중분류=softmax(scipy.special.softmax)
     --#손실함수: 이진=log_loss(cross-entropy), 다중= Categorical Cross Entropy
         from sklearn.metrics import log_loss
           log_loss(y_true, y_pred) #알아서 이진인지 다중인지 인식
@@ -96,9 +97,12 @@ from sklearn.feature_extraction.text import TfidfVectorizer
       - kn.classes_, kn.predict_proba
 
     -- 1-2-2 from sklearn.linear_model import LogisticRegression
-            lr=LogisticRegression(max_iter=k) #최적화를 위한 epoch횟수
+            lr=LogisticRegression(random_state=123) 
       -#하이퍼파라미터
-        params={'C': loguniform(1e-6, 1e+6)}  #큰 규제~작은규제
+        params={'C': loguniform(1e-6, 1e+6),  #큰 규제~작은규제
+                'max_iter':randint(100,1000), #경사하강법 횟수: 대용량이며 5000까지도 함
+                'penalty':['l1', 'l2', 'elasticnet', 'none'], #과적합규
+                'solver':['liblinear', 'saga']} #사용하는 알고리즘
       - lr.coef_, lr.intercept_, lr.classes_, lr.predict_proba, z=lr.decision_function 
 
     -- 1-2-3 from sklearn.linear_model import SGDClassifier
