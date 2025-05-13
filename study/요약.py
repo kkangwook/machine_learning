@@ -72,7 +72,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
   -- 1-1-3 from sklearn.linear_model import Ridge, Lasso
             r=Ridge(), l=Lasso(max_iter=n) #횟수 늘어날수록 warning안뜸
-      from sklearn.preprocessing import PolynomialFeatures(degree=n) #사용 후 정규화/ 다중공선성 문제 발생가능
+      from sklearn.preprocessing import PolynomialFeatures(degree=2 or 3 많이 사용) #사용 후 정규화/ 다중공선성 문제 발생가능
         poly.get_feature_names_out()
       -#하이퍼파라미터: 
         params={'alpha': loguniform(1e-4, 1e2)} #->지수단위로 균등하게
