@@ -53,6 +53,7 @@ from sklearn.neighbors import KNeighborsClassifier
 - test[:5]의 클래스값, 예측값, 확률값(의미는)보기
 
 2. Logistic Regression
+!!!!!!!!!!logisitic regression에서만 유일하게 다중분류시 필요한 파라미터!!!!!
 from sklearn.linear_model import LogisticRegression
 -1. 이진분류
 이진분류의 출력함수 그리기
