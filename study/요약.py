@@ -131,7 +131,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
       -sc.partial_fit, sc.coef_, sc.intercept_, sc.classes_, sc.predict_proba, z=sc.decision_function
 
     -- 1-2-4 from sklearn.naive_bayes import MultinomialNB
-        x는 tfidf형태로 들어감!!!!!
+        텍스트 용도로 사용!!!!!-> x는 tfidf형태로 들어감!!!!!(연속형 데이터는 GaussianNB사용-몰라도됌) 
         param_dist = {'alpha': loguniform(1e-3, 1e3),  # alpha는 0.001과 1000 사이에서 loguniform 분포
                       'fit_prior': bernoulli(0.5)}  # fit_prior는 True/False를 균등한 확률로 샘플링
         - nb.predict_proba(x_test), nb.classes_, nb.coef_
