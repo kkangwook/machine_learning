@@ -132,9 +132,20 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
     -- 1-2-4 from sklearn.naive_bayes import MultinomialNB
         텍스트 용도로 사용!!!!!-> x는 tfidf형태로 들어감!!!!!(연속형 데이터는 GaussianNB사용-몰라도됌) 
-        param_dist = {'alpha': loguniform(1e-3, 1e3),  # alpha는 0.001과 1000 사이에서 loguniform 분포
-                      'fit_prior': bernoulli(0.5)}  # fit_prior는 True/False를 균등한 확률로 샘플링
+        params = {'alpha': loguniform(1e-3, 1e3),  # alpha는 0.001과 1000 사이에서 loguniform 분포
+                  'fit_prior': bernoulli(0.5)}  # fit_prior는 True/False를 균등한 확률로 샘플링
         - nb.predict_proba(x_test), nb.classes_, nb.coef_
+
+
+    -- 1-2-5 from sklearn.svm import SVC: 적은 샘플, 고차원 데이터(유전자,유전자서열,아미노산서열,효소EC)에 사용
+        직선을 그어 클래스를 나눔 
+        x는 무조건 수치형 벡터형태(수치 or one-hot-encoding등), y는 범주형 문자나 레이블인코딩 둘다 가능
+            # 선형데이터일때
+            svc= SVC(C=1.0, kernel='linear')
+            # 비선형일때
+            svc = SVC(C=1.0, kernel='rbf', gamma='scale') : 저차원을 고차원화해 선형분리가 가능하게끔
+        params={'C' : [0.01, 0.1, 1, 10, 100, 1000], # 오차허용큼(일반화용) ~ 오차허용적음(과대적합 위험, 정확도는 좋음)
+                'kernel': ['rbf', 'poly','linear']} #비선형시 kernel 사용-> 주로 rbf 
 
 
     -- 1-3-1 from sklearn.tree import DecisionTreeClassifier 
@@ -176,6 +187,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
         - 중요도 보기: from sklearn.inspection import permutation_importance
             -> result=permutation_importance(hgb,x_train,y_train, n_repeats=10, random_state=123, n_jobs=-1) #n_repeats는 랜덤하게 섞을 횟수/원래 디폴트값은 5
             -> result.importances_mean ->hgb.score, hgb.predict
+
+    
+
 
 
 2. 비지도학습: # only x: 정형데이터- 수치형or 원핫인코딩, 텍스트-tfidf, 이미지-벡터형태를 2차원화 
