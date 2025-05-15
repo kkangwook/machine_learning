@@ -34,3 +34,5 @@ labels = [0, 0, 1, 1]
 
 ncbi의 sra에는 개인이 측정해서 올린 유전자서열이 존재-> 다양한 강아지 품종 존재 
 -> Canis lupus familiaris breed치면 이름나옴 ->들어가서 sample의 samn~링크 누르면 종 정보
+
+dog10k로 종별 염색체, 유전자등 볼 수 있음
