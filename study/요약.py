@@ -91,6 +91,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
             for idx in range(1,k) : # k-1개의 독립변수
                 print(variance_inflation_factor(exog, idx)) #이 값이 10보다 큰 변수는 다중공선성 문제가 있다고 판단
 
+
+    -- 1-1-5 비선형성 관계의 회귀분석에서는 Gradient Boosting Regressor가 가장 널리 사용
+
   --- 1-2 #분류: x는 연속숫자 및 원핫인코딩-레이블인코딩-bow-tfidf전부 가능
         # y클래스는 정수(레이블인코딩), 문자열, [T/F], [[1, 0, 1], [0, 1, 1]]과 같은 중복클래스를 같는 다중레이블 가능   
         # 출력함수: 이진분류=시그모이드(scipy.special.expit)->0.5이상이면 클래스1로 예측/ 아니면 0으로 예측
