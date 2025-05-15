@@ -58,7 +58,7 @@ from sklearn.linear_model import LogisticRegression
 -1. 이진분류
 이진분류의 출력함수 그리기
 - skin.csv 불러와 cust_no, car는 제거하고 gender, age, job, marry는 x변수로/ cupon_react는 y변수로
-- x범주형 데이터는 원핫인코딩, y는 레이블 인코딩
+- x범주형 데이터는 원핫인코딩 **한번에**, y는 레이블 인코딩
 - lr로 학습->R^2비교(c-m, a-s로 보기)-> 선형방정식 보기
 - roc보기-> auc 구하기 
 - z값, 함수를 통한 확률값 구하기
