@@ -93,6 +93,17 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 
     -- 1-1-5 비선형성 관계의 회귀분석에서는 Gradient Boosting Regressor가 가장 널리 사용
+        from sklearn.ensemble import GradientBoostingRegressor
+             x_train에는 숫치나 원핫인코딩(범주형의 경우) y_train에는 레이블인코딩
+            gbr = GradientBoostingRegressor(random_state=123)
+           -params = {'n_estimators': [100, 200, 300, 400, 500],           # 트리 개수
+                      'learning_rate': np.linspace(0.01, 0.3, 30),        # 학습률
+                      'max_depth': [3, 4, 5, 6, 7],                       # 트리 깊이
+                      'min_samples_split': [2, 5, 10],                    # 내부 노드 분할 최소 샘플 수
+                      'min_samples_leaf': [1, 2, 4],                      # 리프 노드 최소 샘플 수
+                      'subsample': [0.6, 0.8, 1.0],                       # 샘플링 비율 (과적합 조절)
+                      'max_features': ['auto', 'sqrt', 'log2', None]}      # 각 트리에서 사용하는 특성 비율
+
 
   --- 1-2 #분류: x는 연속숫자 및 원핫인코딩-레이블인코딩-bow-tfidf전부 가능
         # y클래스는 정수(레이블인코딩), 문자열, [T/F], [[1, 0, 1], [0, 1, 1]]과 같은 중복클래스를 같는 다중레이블 가능   
