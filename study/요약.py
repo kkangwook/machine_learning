@@ -100,8 +100,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
           log_loss(y_true, y_pred) #알아서 이진인지 다중인지 인식
         #트리의 손실함수: 지니불순도, 엔트로피, MSE (트리는 확률기반 모델이 아님)
     --#scoring:
-    from sklearn.metrics import accuracy_score, f1_score,confusion_matrix, log_loss, roc_curve, roc_auc_score
-          function(y_true,y_pred)로 사용
+    from sklearn.metrics import accuracy_score, f1_score,confusion_matrix, classification_report, roc_curve, roc_auc_score
+          function(y_true,y_pred)로 사용  #classification_report로 정밀도 , 재현율, f1 score 확인가능
         -roc curve그리기: 이진분류모델 성능 평가 
             x,y,N=roc_curve(y_test,y_pred_proba)
             plt.plot(x,y) -> roc밑의 면적=AUC가 클수록 좋음(0.9이상이면 매우 정확) 
