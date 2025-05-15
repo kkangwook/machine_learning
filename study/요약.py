@@ -144,6 +144,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
             svc= SVC(C=1.0, kernel='linear')
             # 비선형일때
             svc = SVC(C=1.0, kernel='rbf', gamma='scale') : 저차원을 고차원화해 선형분리가 가능하게끔
+            #고차원일때는 고차원화 할 필요가 없으므로 linear로, 저차원은 선형분리하려면 고차원화가 필요해서 kernel='rbf'
         params={'C' : [0.01, 0.1, 1, 10, 100, 1000], # 오차허용큼(일반화용) ~ 오차허용적음(과대적합 위험, 정확도는 좋음)
                 'kernel': ['rbf', 'poly','linear']} #비선형시 kernel 사용-> 주로 rbf 
 
