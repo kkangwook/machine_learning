@@ -162,6 +162,12 @@ from sklearn.feature_extraction.text import TfidfVectorizer
         params={'C' : [0.01, 0.1, 1, 10, 100, 1000], # 오차허용큼(일반화용) ~ 오차허용적음(과대적합 위험, 정확도는 좋음)
                 'kernel': ['rbf', 'poly','linear']} #비선형시 kernel 사용-> 주로 rbf 
 
+#분류트리: confusion matrix, classification_report, oob_score로 주로 검증증
+# 부트스트랩 샘플링: 전체데이터 셋으로부터 중복해서 데이터 뽑고 추출되지 않은 나머지 데이터셋으로 모델을 검증 
+-배깅방식: randomforest, extratree-> 동일한 알고리즘으로 여러 트리모델 만들고 회귀는 각 모델 평균/
+    분류는 투표를 통해 각 클래스에 대해 다수결의 트리가 정한 클래스로 분류 -> 과적합에 강함
+-부스팅: hist gradient boosting, xgboosting : 현재 모델을 생성하고 얻은 가중치를 다음 모델로 전달해 순차 학습해나감
+    -높은 정확도, learning rate존재 
 
     -- 1-3-1 from sklearn.tree import DecisionTreeClassifier 
             dt=DecisionTreeClassifier(random_state=123)
@@ -173,12 +179,13 @@ from sklearn.feature_extraction.text import TfidfVectorizer
       - dt.feature_importances_, from sklearn.tree import plot_tree(dt,max_depth=k, filled=True, feature_names=['a','b','c'])
 
     -- 1-3-2 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
-            re=Ran/Ext(n_estimators=k,n_jobs=-1,random_state=123) # k개의 트리
+            re=Ran/Ext(n_estimators=k,n_jobs=-1,random_state=123) # k개의 트리-> 500개까지도 가능 or search사용도 가능 
       -# 하이퍼파라미터:
         params={'min_impurity_decrease':uniform(0.0001,0.001),
        'max_depth':randint(10,50),
        'min_samples_split':randint(2,25),
-       'min_samples_leaf':randint(1,25)}
+       'min_samples_leaf':randint(1,25),
+       'max_features' : ["sqrt", "log2"]} #최대 사용할 x변수 개수-> 분류는 변수개수의 제곱근, 회귀는 변수개수/3 
       - re.feature_importances
 
     -- 1-3-3 from sklearn.ensemble import GradientBoostingClassifier
@@ -203,9 +210,19 @@ from sklearn.feature_extraction.text import TfidfVectorizer
             -> result=permutation_importance(hgb,x_train,y_train, n_repeats=10, random_state=123, n_jobs=-1) #n_repeats는 랜덤하게 섞을 횟수/원래 디폴트값은 5
             -> result.importances_mean ->hgb.score, hgb.predict
 
-    
-
-
+    -- 1-3-5  from xgboost import XGBClassifier # kaggle에서 5년 연속 1위 븐류모델 
+              from xgboost import plot_importance # 중요변수(x) 시각화  
+            xc=XGBClassifier(objective='binary:logistic'(이항분류) or 'multi:softprob'(다항분류),eval_metric='logloss') #활성함수 + 평가방법 
+        -#하이퍼파라미터:
+            params = {'colsample_bytree': [0.5, 0.7, 1], #각 트리 생성 시 사용하는 feature 비율
+                      'learning_rate': [0.01, 0.05, 0.1, 0.2, 0.3] #값이 낮을수록 학습이 느리지만 일반화 성능 좋음
+                      'max_depth' : randint(5,15),
+                      'min_child_weight' : [1, 3, 5], #자식 노드 분할을 결정하는 최소 가중치의 합 -> 작으면 더 만흥 자식 노드 분할
+                      'n_estimators' : [100, 200, 300,500]} # 트리개수
+             xc(rs).fit(x_train,y_train, eval_selt=[(x_test,y_test), verbose=True]
+        -# 중요변수 시각화
+            xc.get_booster().get_fscore() # 각 클래스별 fscore 보여줌 
+            plot_importance(xc)->plt.show() # 중요변수 시각화
 
 2. 비지도학습: # only x: 정형데이터- 수치형or 원핫인코딩, 텍스트-tfidf, 이미지-벡터형태를 2차원화 
                # 출력함수 없음, 손실함수도 딱히 없음 (KMeans에서는 inertia의 최소값) 
