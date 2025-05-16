@@ -227,14 +227,15 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
     -- 1-3-5  from xgboost import XGBClassifier # kaggle에서 5년 연속 1위 븐류모델 
               from xgboost import plot_importance # 중요변수(x) 시각화  
-            xc=XGBClassifier(objective='binary:logistic'(이항분류) or 'multi:softprob'(다항분류),eval_metric='logloss') #활성함수 + 평가방법 
+            이진분류: xc=XGBClassifier(objective='binary:logistic',eval_metric='logloss') #활성함수 + 평가방법
+            다중분류: xc=XGBClassifier(objective='multi:softprob',eval_metric='mlogloss')
         -#하이퍼파라미터:
             params = {'colsample_bytree': [0.5, 0.7, 1], #각 트리 생성 시 사용하는 feature 비율
                       'learning_rate': [0.01, 0.05, 0.1, 0.2, 0.3] #값이 낮을수록 학습이 느리지만 일반화 성능 좋음
                       'max_depth' : randint(5,15),
                       'min_child_weight' : [1, 3, 5], #자식 노드 분할을 결정하는 최소 가중치의 합 -> 작으면 더 만흥 자식 노드 분할
                       'n_estimators' : [100, 200, 300,500]} # 트리개수
-             xc(rs).fit(x_train,y_train, eval_selt=[(x_test,y_test), verbose=True] #x는 수치,원핫인코딩 y는 레이블인코딩
+             xc(rs).fit(x_train,y_train, eval_set=[(x_test,y_test)], verbose=True) #x는 수치,원핫인코딩 y는 레이블인코딩
         -# 중요변수 시각화
             xc.get_booster().get_fscore() # 각 클래스별 fscore 보여줌 
             plot_importance(xc)->plt.show() # 중요변수 시각화
