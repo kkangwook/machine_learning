@@ -225,10 +225,11 @@ from sklearn.feature_extraction.text import TfidfVectorizer
             -> result=permutation_importance(hgb,x_train,y_train, n_repeats=10, random_state=123, n_jobs=-1) #n_repeats는 랜덤하게 섞을 횟수/원래 디폴트값은 5
             -> result.importances_mean ->hgb.score, hgb.predict
 
-    -- 1-3-5  from xgboost import XGBClassifier # kaggle에서 5년 연속 1위 븐류모델 
+    -- 1-3-5  from xgboost import XGBClassifier # kaggle에서 5년 연속 1위 븐류모델-> epoch돌때마다 손실값 뜸
               from xgboost import plot_importance # 중요변수(x) 시각화  
             이진분류: xc=XGBClassifier(objective='binary:logistic',eval_metric='logloss') #활성함수 + 평가방법
             다중분류: xc=XGBClassifier(objective='multi:softprob',eval_metric='mlogloss')
+                **또한 early_stopping_rounds=n으로 손실값 다시 증가하면 n 설정해서 제어**
         -#하이퍼파라미터:
             params = {'colsample_bytree': [0.5, 0.7, 1], #각 트리 생성 시 사용하는 feature 비율
                       'learning_rate': [0.01, 0.05, 0.1, 0.2, 0.3] #값이 낮을수록 학습이 느리지만 일반화 성능 좋음
