@@ -91,10 +91,10 @@ from sklearn.feature_extraction.text import TfidfVectorizer
             for idx in range(1,k) : # k-1개의 독립변수
                 print(variance_inflation_factor(exog, idx)) #이 값이 10보다 큰 변수는 다중공선성 문제가 있다고 판단
 
-
+# 트리 회귀 모델: 스케일링, 정규화 필요 X, 비선형적+많은 특성에 주로 사용 
     -- 1-1-5 비선형성 관계의 회귀분석에서는 Gradient Boosting Regressor가 가장 널리 사용
         from sklearn.ensemble import GradientBoostingRegressor
-             x_train에는 숫치나 원핫인코딩(범주형의 경우) y_train에는 레이블인코딩
+             x_train에는 수치나 원핫인코딩(범주형의 경우) y_train에는 레이블인코딩
             gbr = GradientBoostingRegressor(random_state=123)
            -params = {'n_estimators': [100, 200, 300, 400, 500],           # 트리 개수
                       'learning_rate': np.linspace(0.01, 0.3, 30),        # 학습률
@@ -103,6 +103,11 @@ from sklearn.feature_extraction.text import TfidfVectorizer
                       'min_samples_leaf': [1, 2, 4],                      # 리프 노드 최소 샘플 수
                       'subsample': [0.6, 0.8, 1.0],                       # 샘플링 비율 (과적합 조절)
                       'max_features': ['auto', 'sqrt', 'log2', None]}      # 각 트리에서 사용하는 특성 비율
+
+    -- 1-1-6 from xgboost import XGBRegressor : 캐글 탑 5 회귀모델
+            from xgboost import plot_importance # 중요변수 시각화 
+        xr= XGBRegressor(objective='reg:squarederror')
+
 
 
   --- 1-2 #분류: x는 연속숫자 및 원핫인코딩-레이블인코딩-bow-tfidf전부 가능
