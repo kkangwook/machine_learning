@@ -230,7 +230,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
               from xgboost import plot_importance # 중요변수(x) 시각화  
             이진분류: xc=XGBClassifier(objective='binary:logistic',eval_metric='logloss') #활성함수 + 평가방법
             다중분류: xc=XGBClassifier(objective='multi:softprob',eval_metric='mlogloss')
-                **또한 early_stopping_rounds=n으로 손실값 다시 증가하면 n 설정해서 제어**
+                **또한 early_stopping_rounds=n으로 손실값 다시 증가하면 n까지 가기 전에 멈춤 **
         -#하이퍼파라미터:
             params = {'colsample_bytree': [0.5, 0.7, 1], #각 트리 생성 시 사용하는 feature 비율
                       'learning_rate': [0.01, 0.05, 0.1, 0.2, 0.3] #값이 낮을수록 학습이 느리지만 일반화 성능 좋음
