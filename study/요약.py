@@ -177,6 +177,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
                 'kernel': ['rbf', 'poly','linear']} #비선형시 kernel 사용-> 주로 rbf 
 
 #분류트리: confusion matrix, classification_report, oob_score로 주로 검증증
+                                                # oob_score=True하고 model.oob_score_로 자체 평가
 # 부트스트랩 샘플링: 전체데이터 셋으로부터 중복해서 데이터 뽑고 추출되지 않은 나머지 데이터셋으로 모델을 검증 
 -배깅방식: randomforest, extratree-> 동일한 알고리즘으로 여러 트리모델 만들고 회귀는 각 모델 평균/
     분류는 투표를 통해 각 클래스에 대해 다수결의 트리가 정한 클래스로 분류 -> 과적합에 강함
