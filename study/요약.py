@@ -106,8 +106,17 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
     -- 1-1-6 from xgboost import XGBRegressor : 캐글 탑 5 회귀모델
             from xgboost import plot_importance # 중요변수 시각화 
-        xr= XGBRegressor(objective='reg:squarederror')
-
+                xr= XGBRegressor(objective='reg:squarederror', random_state=123)  
+        # 파라미터:
+            params= {'n_estimators': [100, 300, 500], #트리개수
+                    'max_depth': [3, 5, 7],
+                    'learning_rate': [0.01, 0.05, 0.1],
+                    'subsample': uniform(0.7,1)} #학습에 사용할 데이터 비율
+                xr(rs).fit(x_train,y_train) # x는 수치나 원핫인코딩, y는 수치 
+        # 중요변수 확인 
+        fscore = xr.get_booster().get_fscore() 
+        # 중요변수 시각화 
+        plot_importance(xr, max_num_features=13) # 13개까지 나타냄
 
 
   --- 1-2 #분류: x는 연속숫자 및 원핫인코딩-레이블인코딩-bow-tfidf전부 가능
@@ -224,7 +233,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
                       'max_depth' : randint(5,15),
                       'min_child_weight' : [1, 3, 5], #자식 노드 분할을 결정하는 최소 가중치의 합 -> 작으면 더 만흥 자식 노드 분할
                       'n_estimators' : [100, 200, 300,500]} # 트리개수
-             xc(rs).fit(x_train,y_train, eval_selt=[(x_test,y_test), verbose=True]
+             xc(rs).fit(x_train,y_train, eval_selt=[(x_test,y_test), verbose=True] #x는 수치,원핫인코딩 y는 레이블인코딩
         -# 중요변수 시각화
             xc.get_booster().get_fscore() # 각 클래스별 fscore 보여줌 
             plot_importance(xc)->plt.show() # 중요변수 시각화
