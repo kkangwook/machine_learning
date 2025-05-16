@@ -21,6 +21,8 @@
 -x값은 레이블인코딩하기 위험한데(값이 클수록 의미를 가지게됨) y값은 레이블 인코딩해도 상관없음
     ->y를 인코딩한다->분류문제다->클래스로 인식되므로 숫자크기에 의미는 없음
 
+@@@@@회귀에서는 선형일때 릿지/라쏘쓰고 비선형일떄는 xgboostingregressor쓰고 
+  분류에서는 고차원이면 svm(svc나 linearsvc)쓰고 그 외는 xgboostingclassifier나 histgbc쓰면 얼추 맞음 @@@@@
 
 from scipy.stats import randint, uniform, loguniform, bernoulli
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
