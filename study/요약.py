@@ -239,6 +239,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
              xc(rs).fit(x_train,y_train, eval_set=[(x_test,y_test)], verbose=True) #x는 수치,원핫인코딩 y는 레이블인코딩
                                 -> eval_set설정하고 verbose=True하면 매 iter마다 손실값(mlogloss)이 뜸 
         -# 중요변수 시각화
+            xc.feature_importances_
             xc.get_booster().get_fscore() # 각 클래스별 fscore 보여줌 
             plot_importance(xc)->plt.show() # 중요변수 시각화
 
