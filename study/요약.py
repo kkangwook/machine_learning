@@ -114,6 +114,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
                     'subsample': uniform(0.7,1)} #학습에 사용할 데이터 비율
                 xr(rs).fit(x_train,y_train) # x는 수치나 원핫인코딩, y는 수치 
         # 중요변수 확인 
+        xr.feature_importances_
         fscore = xr.get_booster().get_fscore() 
         # 중요변수 시각화 
         plot_importance(xr, max_num_features=13) # 13개까지 나타냄
