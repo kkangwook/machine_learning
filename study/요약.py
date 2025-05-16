@@ -237,6 +237,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
                       'min_child_weight' : [1, 3, 5], #자식 노드 분할을 결정하는 최소 가중치의 합 -> 작으면 더 만흥 자식 노드 분할
                       'n_estimators' : [100, 200, 300,500]} # 트리개수
              xc(rs).fit(x_train,y_train, eval_set=[(x_test,y_test)], verbose=True) #x는 수치,원핫인코딩 y는 레이블인코딩
+                                -> eval_set설정하고 verbose=True하면 매 iter마다 손실값(mlogloss)이 뜸 
         -# 중요변수 시각화
             xc.get_booster().get_fscore() # 각 클래스별 fscore 보여줌 
             plot_importance(xc)->plt.show() # 중요변수 시각화
