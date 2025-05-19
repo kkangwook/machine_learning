@@ -27,8 +27,20 @@
 from scipy.stats import randint, uniform, loguniform, bernoulli
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.preprocessing import LabelEncoder
-from sklearn.feature_extraction.text import TfidfVectorizer
 
+- tfidf-------------------------------
+from sklearn.feature_extraction.text import TfidfVectorizer
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.stem import PorterStemmer
+stemmer=PorterStemmer()
+stop_words=stopwords.words('english')
+def tokenzier(x):
+    tokens=word_tokenize(x.lower())
+    tokens=[i for i in tokens if len(i)>2 and i not in stop_words]
+    tokens=[stemmer.stem(i) for i in tokens]
+    return tokens
+------------------------------------------
 
 0-1. **지도 학습**의 검증+최적의 파라미터(search는 따로 fit필요)
     -- 0-1-1 from sklearn.model_selection import cross_validate
