@@ -290,6 +290,7 @@ def draw_fruits(arr,ratio=1):   #arr에 3차원배열인 fruits를 입력받음
             -average: 일반적, 균형잡힌, -centroid: 데잍어가 구형분포일때 
             -고차원이면 'ward' 나 'average', -일반적으로는 'single', 'complete' 
         dendrogram(clusters), plt.show()로 덴드로그램으로 나타냄 
+            import sys -> sys.setrecursionlimit(10000) # 재귀 깊이 한도 늘려 많은 샘플도 볼 수 있게 
         cut_cluster = fcluster(clusters, t=n, criterion='maxclust' or 'distance') #클러스터개수n or 덴드로그램높이n
         print(cut_cluster)하면 각 샘플별 1~k개의 labels로 표현  -> 얘를 scatter의 c로 하면 색다르게 산점도가능 
             
