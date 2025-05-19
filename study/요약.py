@@ -298,6 +298,7 @@ def draw_fruits(arr,ratio=1):   #arr에 3차원배열인 fruits를 입력받음
 -시각화하기: df['cluster']=km.labels_ or cut_cluster로 df에 추가
             g=df.groupby('cluster') 이후 g.mean()으로 각 그룹별 특징보기
                     ->g.mean().plot()으로 시각화
+    -or a변수에 대해 상관관계 제일높은 변수 b로 plot.scatter(a,b,c=df['cluster']) 
 
 
 3. 강화학습 
