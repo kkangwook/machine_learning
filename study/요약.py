@@ -294,7 +294,10 @@ def draw_fruits(arr,ratio=1):   #arr에 3차원배열인 fruits를 입력받음
         cut_cluster = fcluster(clusters, t=n, criterion='maxclust' or 'distance') #클러스터개수n or 덴드로그램높이n
         print(cut_cluster)하면 각 샘플별 1~k개의 labels로 표현  -> 얘를 scatter의 c로 하면 색다르게 산점도가능 
             
-
+    
+-시각화하기: df['cluster']=km.labels_ or cut_cluster로 df에 추가
+            g=df.groupby('cluster') 이후 g.mean()으로 각 그룹별 특징보기
+                    ->g.mean().plot()으로 시각화
 
 
 3. 강화학습 
