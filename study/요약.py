@@ -35,7 +35,7 @@ from nltk.tokenize import word_tokenize
 from nltk.stem import PorterStemmer
 stemmer=PorterStemmer()
 stop_words=stopwords.words('english')
-def tokenzier(x):
+def tokenizer(x):
     tokens=word_tokenize(x.lower())
     tokens=[i for i in tokens if len(i)>2 and i not in stop_words]
     tokens=[stemmer.stem(i) for i in tokens]
