@@ -262,11 +262,25 @@ def draw_fruits(arr,ratio=1):   #arr에 3차원배열인 fruits를 입력받음
             axes[i,j].axis('off')
     plt.show()
 
-  --- 2 #군집화 2차원 데이터로 x값만
+
+
+  --- 2 #군집화(비계층적) 2차원 데이터로 x값만, 정규화 필요  
     -- 2-1 from sklearn.cluster import KMeans
-            km=KMeans(n_clusters=k, random_state=123, n_init=10)  #search불가
+            km=KMeans(n_clusters=k, random_state=123, n_init=10,max_iter=300)  #search불가 
             #-> km.inertia_ 엘보우 굽어질때를 최적의 k로
         - km.labels_, km.cluster_centers_, km.inertia_, km.transform(f_2d[100:101)), km.n_iter_
+
+    -- 2-2 계층적 군집화: 나누고 덴드로그램 그려 밑에서부터 올라가면서 자를 높이k나 클러스터수k를 결정
+        #데이터프레임형태로 들어감, 주로 표준화해서
+        from scipy.cluster.hierarchy import linkage, dendrogram, fcluster 
+        clusters = linkage(df, method='single' or 'complete','average','centroid') # 일단 여러개로 나눔
+            -single: 데이터 연속적일때, -complete: 군집간 명확한 구분이 필요할때
+            -average: 일반적, 균형잡힌, -centroid: 데잍어가 구형분포일때 
+            -고차원이면 'ward' 나 'average' 
+        dendrogram(clusters), plt.show()로 덴드로그램으로 나타냄 
+        cut_cluster = fcluster(clusters, t=n, criterion='maxclust' or 'distance') #클러스터개수n or 덴드로그램높이n
+        print(cut_cluster)하면 각 샘플별 1~k개의 labels로 표현  -> 얘를 scatter의 c로 하면 색다르게 산점도가능 
+            
 
 
 
