@@ -283,7 +283,7 @@ def draw_fruits(arr,ratio=1):   #arr에 3차원배열인 fruits를 입력받음
         - km.labels_, km.cluster_centers_, km.inertia_, km.transform(f_2d[100:101)), km.n_iter_
 
     -- 2-2 계층적 군집화: 나누고 덴드로그램 그려 밑에서부터 올라가면서 자를 높이k나 클러스터수k를 결정
-        #데이터프레임형태로 들어감, 주로 표준화해서
+        #넘파이, 데이터프레임형태로도 들어감, 주로 표준화해서
         from scipy.cluster.hierarchy import linkage, dendrogram, fcluster 
         clusters = linkage(df, method='single' or 'complete','average','centroid') # 일단 여러개로 나눔
             -single: 데이터 연속적일때, -complete: 군집간 명확한 구분이 필요할때
