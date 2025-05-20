@@ -338,21 +338,18 @@ User Item        Item bread butter milk        Item bread butter milk
  9 milk
  10 bread
 
--- tramsaction 생성 1  
+--- tramsaction 생성1  
 data = {'User': [1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 7, 8, 9, 10],
         'Item': ['milk', 'bread', 'bread', 'butter', 'milk', 'butter',
                  'bread', 'milk', 'butter', 'bread', 'butter', 'milk',
                  'milk', 'bread']}
-# 데이터프레임 생성
-df = pd.DataFrame(data)
-#  트랜잭션(transaction) 데이터 만들기 : One-Hot Encoding 변환
-group = df.groupby(['User','Item']) 
+df = pd.DataFrame(data) # 데이터프레임 생성
+group = df.groupby(['User','Item']) #  트랜잭션(transaction) 데이터 만들기 : One-Hot Encoding 변환
 transaction = group.size().unstack().fillna(0) # 결측치 0 채우기 
-# 부울형(True/False) 변환  
-transaction = transaction.astype(bool) # 위의 맨 오른쪽 df 
+transaction = transaction.astype(bool) # 부울형(True/False) 변환 -> 위의 맨 오른쪽 df 
 
 
--- transaction 생성 2
+--- transaction 생성2
 data는 인덱스가 구매번호, 컬럼(0~30)이 한번의 구매해서 순서대로 산 물건
 bought_products = []
 for row in data.values:
@@ -363,8 +360,16 @@ te_ary = te.fit(bought_products).transform(bought_products)
 transaction=pd.DataFrame(te_ary, columns=te.columns_)
 
 
+---텍스트로 transaction생성3
+sentences=['a','b','c']
+tokens=[word_tokenize(row) for row in sentences]
+te = TransactionEncoder() 
+te_ary = te.fit(tokens).transform(tokens)
+transaction = pd.DataFrame(te_ary, columns=te.columns_)
 
---transaction넣어 연관성 분석하기
+
+
+>>--transaction넣어 연관성 분석하기
     from mlxtend.frequent_patterns import apriori, association_rules  
       # 지지도(1차)로 아이템선택: 각 아이템별 2개씩 짝지어(스스로도 포함가능) support값 보여줌 
       frequent_itemsets = apriori(transaction, min_support=0.1, max_len=5, use_colnames=True) #최소 support 0.1이상만 보여줌
