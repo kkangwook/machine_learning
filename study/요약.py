@@ -374,7 +374,8 @@ transaction = pd.DataFrame(te_ary, columns=te.columns_)
       # 지지도(1차)로 아이템선택: 각 아이템별 2개씩 짝지어(스스로도 포함가능) support값 보여줌 
       frequent_itemsets = apriori(transaction, min_support=0.1, max_len=5, use_colnames=True) #최소 support 0.1이상만 보여줌
       # 연관 규칙 생성 : 신뢰도(2차) 기준  ->frequent_itemsets의 각 튜플값 별 jaccard  certainty  kulczynski 값
-      rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.2) 
+      rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.2) # 규칙개수 지정
+    -> min_support, metrics, min_threshold는 우리가 지정
       # 다양한 평가 지표들 보기
       final_rules = rules[['antecedents','consequents','support','confidence','lift','zhangs_metric','jaccard']]
         이거 하면 이제 해석하면 됨 , 사건은 2개간의 비교뿐만아니라 (a,b,c)와 (d,e)사이 간의 비교도 출력될수있음
