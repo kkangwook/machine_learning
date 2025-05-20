@@ -311,6 +311,52 @@ def draw_fruits(arr,ratio=1):   #arr에 3차원배열인 fruits를 입력받음
     -or a변수에 대해 상관관계 제일높은 변수 b로 plot.scatter(a,b,c=df['cluster']) 
 
 
+
+-- 2-3 연관분석(비지도학습): 항목이나 사건 간의 연관성(관계)를 찾는 방법 
+            관련분야: 마트, 무역, 마케팅 
+    연관규칙 평가척도:
+        - 지지도(support) - 동시 구매패턴보기: 상품A,상품B 동시 거래수(A ∩ B) / 전체거래수
+        - 신뢰도(confidence) - A구매시 B구매패턴:  A와 B를 포함한 거래수(A ∩ B) / A를 포함한 거래수
+        - 향상도(lift) - 상품A와 상품B 간의 상관성: 신뢰도 / B가 포함될 거래율
+                향상도>1: 양의 연관성, 향상도=1: 서로 독립(아무관계X), 향상도<1: 음의 연관성(반비례) 
+
+#트랜잭션 데이터로 변환 필요 : 트랜잭션(10) vs 아이템(3)
+User Item        Item bread butter milk        Item bread butter milk
+                 User                          User
+ 1 milk           1    1.0   0.0    1.0         1    True False True
+ 1 bread          2    1.0   1.0    0.0         2    True True False
+ 2 bread          3    0.0   1.0    1.0         3    False True True
+ 2 butter         4    1.0   0.0    0.0         4    True False False
+ 3 milk           5    0.0   1.0    1.0         5    False True True
+ 3 butter    ->   6    1.0   0.0    0.0   ->    6    True False False
+ 4 bread          7    0.0   1.0    0.0         7    False True False
+ 5 milk           8    0.0   0.0    1.0         8    False False True
+ 5 butter         9    0.0   0.0    1.0         9    False False True
+ 6 bread          10   1.0   0.0    0.0         10   True False False
+ 7 butter
+ 8 milk
+ 9 milk
+ 10 bread
+
+
+
+
+
+
+
+
+Item bread butter milk
+User
+1 True False True
+2 True True False
+3 False True True
+4 True False False
+5 False True True
+6 True False False
+7 False True False
+8 False False True
+9 False False True
+10 True False False
 3. 강화학습 
 
 
