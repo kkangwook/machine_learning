@@ -313,7 +313,7 @@ def draw_fruits(arr,ratio=1):   #arr에 3차원배열인 fruits를 입력받음
 
 
 -- 2-3 연관분석(비지도학습): 항목이나 사건 간의 연관성(관계)를 찾는 방법 
-            관련분야: 마트, 무역, 마케팅 
+            관련분야: 마트, 무역, 마케팅, 생물학의 단백질, 유전자 상관관계계 
     연관규칙 평가척도:
         - 지지도(support) - 동시 구매패턴보기: 상품A,상품B 동시 거래수(A ∩ B) / 전체거래수
         - 신뢰도(confidence) - A구매시 B구매패턴:  A와 B를 포함한 거래수(A ∩ B) / A를 포함한 거래수
@@ -338,19 +338,33 @@ User Item        Item bread butter milk        Item bread butter milk
  9 milk
  10 bread
 
-# 1. sample data 생성  
+-- tramsaction 생성 1  
 data = {'User': [1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 7, 8, 9, 10],
         'Item': ['milk', 'bread', 'bread', 'butter', 'milk', 'butter',
                  'bread', 'milk', 'butter', 'bread', 'butter', 'milk',
                  'milk', 'bread']}
 # 데이터프레임 생성
 df = pd.DataFrame(data)
-# 2. 트랜잭션(transaction) 데이터 만들기 : One-Hot Encoding 변환
+#  트랜잭션(transaction) 데이터 만들기 : One-Hot Encoding 변환
 group = df.groupby(['User','Item']) 
 transaction = group.size().unstack().fillna(0) # 결측치 0 채우기 
 # 부울형(True/False) 변환  
 transaction = transaction.astype(bool) # 위의 맨 오른쪽 df 
 
+
+-- transaction 생성 2
+data는 인덱스가 구매번호, 컬럼(0~30)이 한번의 구매해서 순서대로 산 물건
+bought_products = []
+for row in data.values:
+    bought_products.append([str(item) for item in row if str(item) != 'nan'])
+from mlxtend.preprocessing import TransactionEncoder
+te = TransactionEncoder() 
+te_ary = te.fit(bought_products).transform(bought_products)
+transaction=pd.DataFrame(te_ary, columns=te.columns_)
+
+
+
+--transaction넣어 연관성 분석하기
     from mlxtend.frequent_patterns import apriori, association_rules  
       # 지지도(1차)로 아이템선택: 각 아이템별 2개씩 짝지어(스스로도 포함가능) support값 보여줌 
       frequent_itemsets = apriori(transaction, min_support=0.1, max_len=5, use_colnames=True) #최소 support 0.1이상만 보여줌
@@ -358,6 +372,7 @@ transaction = transaction.astype(bool) # 위의 맨 오른쪽 df
       rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.2) 
       # 다양한 평가 지표들 보기
       final_rules = rules[['antecedents','consequents','support','confidence','lift','zhangs_metric','jaccard']]
+        이거 하면 이제 해석하면 됨 , 사건은 2개간의 비교뿐만아니라 (a,b,c)와 (d,e)사이 간의 비교도 출력될수있음
 ''' 가능한 지표들:
 antecedents : 선행사건 이름
 consequents : 후행사건 이름
@@ -369,6 +384,14 @@ lift : 향상도(두 항목의 독립성을 고려한 연관관계 강도)
 zhangs_metric : 향상도의 더 균형잡힌 지표 
 jaccard : a,b항목이 등장한 수 중 a,b동시에 나타난 비율
 '''
+
+    #보고싶은 값들 가져오기
+    final_rules.columns = ['lhs','rhs','support','confidence','lift','metric','jaccard']
+    -whole milk보고싶으면
+        whole_milk = final_rules[final_rules.rhs==frozenset({'whole milk'})]
+    -other vegetables보고싶으면
+        other_vege = final_rules[final_rules.rhs==frozenset({'other vegetables'})] 
+
 
 # 연관규칙 시각화
 import networkx as nx
