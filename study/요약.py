@@ -358,15 +358,16 @@ transaction = transaction.astype(bool) # 위의 맨 오른쪽 df
       rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.2) 
       # 다양한 평가 지표들 보기
       final_rules = rules[['antecedents','consequents','support','confidence','lift','zhangs_metric','jaccard']]
-'''
-antecedents  consequents : 연관 규칙의 선행사건(A)과 후행사건(B) 항목   예) (bread) => (butter) : 빵을 구매한 사람이 버터를 구매할 가능성
+''' 가능한 지표들:
+antecedents : 선행사건 이름
+consequents : 후행사건 이름
 antecedent support : 선행사건(A) 발생한 비율 = A / 전체거래수    예) bread = 5 / 10 = 0.5 
 consequent support : 후행사건(A) 발생한 비율 = A / 전체거래수     예) butter = 4 / 10 = 0.4  
-support : 지지도 = (A ∩ B) / 전체거래수        예) (bread) => (butter) : = 1 / 10 = 0.1 
-confidence : 신뢰도(조건부 확률) = (A ∩ B) / LHS 거래수      에) (bread) => (butter) : = 1 / 5 = 0.2 
-lift : 향상도(두 항목의 독립성을 고려한 연관관계 강도) = confidence / 지지도(RHS)    예) (bread) => (butter) : 0.2 / 0.4 = 0.5 
-zhangs_metric : Zhang의 메트릭, 향상도(left) 평가 지표(left 평가 지표 : -1~1)
-jaccard : LHS와 RHS의 교집합을 전체 합집합에 대한 비율(두 항목의 유사도 : 0~1) 
+support: 모든 거래중 a,b 동시에 비율
+confidence : a구매시 b도 구매할 비율율 
+lift : 향상도(두 항목의 독립성을 고려한 연관관계 강도) 
+zhangs_metric : 향상도의 더 균형잡힌 지표 
+jaccard : a,b항목이 등장한 수 중 a,b동시에 나타난 비율
 '''
 
 # 연관규칙 시각화
@@ -393,18 +394,7 @@ plot_rules(final_rules, 'jaccard') # 두 항목 간의 유사성 측정 지표(0
 
 
 
-Item bread butter milk
-User
-1 True False True
-2 True True False
-3 False True True
-4 True False False
-5 False True True
-6 True False False
-7 False True False
-8 False False True
-9 False False True
-10 True False False
+
 3. 강화학습 
 
 
