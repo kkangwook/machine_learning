@@ -281,6 +281,10 @@ def draw_fruits(arr,ratio=1):   #arr에 3차원배열인 fruits를 입력받음
 
 
   --- 2 #군집화(비계층적) 2차원 데이터로 x값만, 정규화 필요  
+!!!! 군집수 찾기: 이너시아 그래프 그리고 팔꿈치 꺽이는 부분
+    -> 이때 계속 꺽인다면 기울기 감소의 크기가 줄어드는 지점 바로 전꺼로
+        ex) 1000->600->400->350 이면 400지점인 k=3  !!!!
+
     -- 2-1 from sklearn.cluster import KMeans
             km=KMeans(n_clusters=k, random_state=123, n_init=10,max_iter=300)  #search불가 
             #-> km.inertia_ 엘보우 굽어질때를 최적의 k로
