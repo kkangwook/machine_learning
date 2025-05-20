@@ -320,7 +320,7 @@ def draw_fruits(arr,ratio=1):   #arr에 3차원배열인 fruits를 입력받음
         - 향상도(lift) - 상품A와 상품B 간의 상관성: 신뢰도 / B가 포함될 거래율
                 향상도>1: 양의 연관성, 향상도=1: 서로 독립(아무관계X), 향상도<1: 음의 연관성(반비례) 
 
-#트랜잭션 데이터로 변환 필요 : 트랜잭션(10) vs 아이템(3)
+#트랜잭션 데이터로 변환 필요 : 트랜잭션=user(10) vs 아이템-고유값(3)
 User Item        Item bread butter milk        Item bread butter milk
                  User                          User
  1 milk           1    1.0   0.0    1.0         1    True False True
@@ -338,10 +338,58 @@ User Item        Item bread butter milk        Item bread butter milk
  9 milk
  10 bread
 
+# 1. sample data 생성  
+data = {'User': [1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 7, 8, 9, 10],
+        'Item': ['milk', 'bread', 'bread', 'butter', 'milk', 'butter',
+                 'bread', 'milk', 'butter', 'bread', 'butter', 'milk',
+                 'milk', 'bread']}
+# 데이터프레임 생성
+df = pd.DataFrame(data)
+# 2. 트랜잭션(transaction) 데이터 만들기 : One-Hot Encoding 변환
+group = df.groupby(['User','Item']) 
+transaction = group.size().unstack().fillna(0) # 결측치 0 채우기 
+# 부울형(True/False) 변환  
+transaction = transaction.astype(bool) # 위의 맨 오른쪽 df 
 
+    from mlxtend.frequent_patterns import apriori, association_rules  
+      # 지지도(1차)로 아이템선택: 각 아이템별 2개씩 짝지어(스스로도 포함가능) support값 보여줌 
+      frequent_itemsets = apriori(transaction, min_support=0.1, max_len=5, use_colnames=True) #최소 support 0.1이상만 보여줌
+      # 연관 규칙 생성 : 신뢰도(2차) 기준  ->frequent_itemsets의 각 튜플값 별 jaccard  certainty  kulczynski 값
+      rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.2) 
+      # 다양한 평가 지표들 보기
+      final_rules = rules[['antecedents','consequents','support','confidence','lift','zhangs_metric','jaccard']]
+'''
+antecedents  consequents : 연관 규칙의 선행사건(A)과 후행사건(B) 항목   예) (bread) => (butter) : 빵을 구매한 사람이 버터를 구매할 가능성
+antecedent support : 선행사건(A) 발생한 비율 = A / 전체거래수    예) bread = 5 / 10 = 0.5 
+consequent support : 후행사건(A) 발생한 비율 = A / 전체거래수     예) butter = 4 / 10 = 0.4  
+support : 지지도 = (A ∩ B) / 전체거래수        예) (bread) => (butter) : = 1 / 10 = 0.1 
+confidence : 신뢰도(조건부 확률) = (A ∩ B) / LHS 거래수      에) (bread) => (butter) : = 1 / 5 = 0.2 
+lift : 향상도(두 항목의 독립성을 고려한 연관관계 강도) = confidence / 지지도(RHS)    예) (bread) => (butter) : 0.2 / 0.4 = 0.5 
+zhangs_metric : Zhang의 메트릭, 향상도(left) 평가 지표(left 평가 지표 : -1~1)
+jaccard : LHS와 RHS의 교집합을 전체 합집합에 대한 비율(두 항목의 유사도 : 0~1) 
+'''
 
+# 연관규칙 시각화
+import networkx as nx
+def plot_rules(rules, weight, top_n=10): # (rules, n)    
+    rules = rules.nlargest(top_n, 'confidence') # 신뢰도 기준, 상위 n개  
+    G = nx.DiGraph() # 네트워크 그래프 
 
+    for _, rule in rules.iterrows():
+        G.add_edge(rule['antecedents'], rule['consequents'], # 노드 : 타원  
+                   weight=rule[weight]) # 엣지 : 가중치
 
+    pos = nx.spring_layout(G)
+    plt.figure(figsize=(10, 6))
+    nx.draw_networkx(G, pos, with_labels=True, node_color="lightblue", node_size=3000, edge_color="gray")
+    labels = nx.get_edge_attributes(G, 'weight')
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)
+    plt.title(f"Association Rules Graph : {weight}")
+    plt.show()
+# 함수호출 
+plot_rules(final_rules, 'lift') # 두 항목의 연관관계 지표(0~1)  
+plot_rules(final_rules, 'zhangs_metric') # lift 연관관계 평가 지표(-1 ~ 1)
+plot_rules(final_rules, 'jaccard') # 두 항목 간의 유사성 측정 지표(0 ~ 1)
 
 
 
