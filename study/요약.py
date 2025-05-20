@@ -77,6 +77,10 @@ def tokenizer(x):
        params={'n_neighbors':randint(1,100)}  
       -dist, index=knr.kneigbors(x_test[:5])
 
+# 선형회귀에서의 정규,스케일링화
+    # 모델성능과 안정성이 중요-> 스케일링 필요
+    # 해석가능성이 중요(나이, 연봉등 그자체로 의미) -> 안해도 됨
+    # 규제가 들어간 회귀(릿지, 라쏘) or 딥러닝 -> 스케일링 필요
   -- 1-1-2 from sklearn.linear_model import LinearRegression
             lr=LinearRegression()
       -#하이퍼파라미터 하나: 
