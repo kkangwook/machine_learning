@@ -428,7 +428,7 @@ plot_rules(final_rules, 'jaccard') # 두 항목 간의 유사성 측정 지표(0
 conda install -c conda-forge scikit-surprise
 
 -협업필터링: 인덱스에 유저, 컬럼에 상품있는 df로 만둘어 df.corr()로 각 컬럼간 상관관계 비교(NA는 무시함)
-from surprise import SVD # SVD model 
+from surprise import SVD, accuracy # SVD model, 모델평가  
 from surprise import Reader, Dataset # 서프라이즈 위한 자체 데이터세트 생성 필요
 from surprise.model_selection import train_test_split #서프라이즈 전용 분리기
 # 평가자, 상품, 평점의 컬럼을 가진 df -> surprise용 데이터셋 만들기
@@ -438,17 +438,21 @@ trainset, testset = train_test_split(data, test_size=0.1,random_state=1) # x하�
 model = SVD(random_state=123)
 model.fit(trainset)
 #예측하기: 원본df와 동일한 형태의 한줄 들어감, actural_rating=0으로(어느값이 들어가던 상관X)
-model.predict(user,item,actual_rating) #user가 item을 이용한다면 어떤 평점을 줄지 예측
+pred=model.predict(user,item,actual_rating) #user가 item을 이용한다면 어떤 평점을 줄지 예측
+    #-> r_ui가 실제값(내가 넣은값), est가 모델이 예측한값
 ex)user_id  = 'Toby', items = ['Just My','Lady','The Night'], actual_rating = 0
 for item_id in items :
     svd_pred = model.predict(user_id, item_id, actual_rating)
     print(svd_pred)
+#평가
+accuracy.mse(preds) #값이 작을수록 정확도 큼
+accuracy.rmse(preds) 
 
 -내용기반 필터링: 상품의 요약 텍스트와 같은 데이터를 tfidf화해 문서유사도 비교해서 상위 n개 상품 추천
 
 
 
-3. 강화학습 
+4. 강화학습 
 
 
 
