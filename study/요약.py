@@ -447,7 +447,7 @@ model.test(testset)
 ex)user_id  = 'Toby', items = ['Just My','Lady','The Night'], actual_rating = 0
 for item_id in items :
     svd_pred = model.predict(user_id, item_id, actual_rating)
-    print(svd_pred)
+    print(svd_pred,svd_pred.r_ui, svd_pred.est) #따로 불러오는것도 가능
 
 #평가
 accuracy.mse(preds) #값이 작을수록 정확도 큼
