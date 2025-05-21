@@ -443,10 +443,12 @@ pred=model.predict(user,item,actual_rating) #user가 item을 이용한다면 어
     #-> r_ui가 실제값(내가 넣은값), est가 모델이 예측한값
 #전체데이터셋 넣으려면
 model.test(testset) 
+# or
 ex)user_id  = 'Toby', items = ['Just My','Lady','The Night'], actual_rating = 0
 for item_id in items :
     svd_pred = model.predict(user_id, item_id, actual_rating)
     print(svd_pred)
+
 #평가
 accuracy.mse(preds) #값이 작을수록 정확도 큼
 accuracy.rmse(preds) 
