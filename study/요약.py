@@ -441,6 +441,8 @@ model.fit(trainset)
 #예측하기: 원본df와 동일한 형태의 한줄 들어감, actural_rating=0으로(어느값이 들어가던 상관X)
 pred=model.predict(user,item,actual_rating) #user가 item을 이용한다면 어떤 평점을 줄지 예측
     #-> r_ui가 실제값(내가 넣은값), est가 모델이 예측한값
+#전체데이터셋 넣으려면
+model.test(testset) 
 ex)user_id  = 'Toby', items = ['Just My','Lady','The Night'], actual_rating = 0
 for item_id in items :
     svd_pred = model.predict(user_id, item_id, actual_rating)
