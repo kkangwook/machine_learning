@@ -432,6 +432,7 @@ from surprise import SVD, accuracy # SVD model, 모델평가
 from surprise import Reader, Dataset # 서프라이즈 위한 자체 데이터세트 생성 필요
 from surprise.model_selection import train_test_split #서프라이즈 전용 분리기
 # 평가자, 상품, 평점의 컬럼을 가진 df -> surprise용 데이터셋 만들기
+#우선 인덱스에 유저, 컬럼에 상품, value에 평점으로 하는 피벗테이블 만들어 어떻게 할지 보기
 reader = Reader(rating_scale=(1, 5))  # 평점 컬럼의 최소값과 최대값 명시
 data = Dataset.load_from_df(df, reader) #데이터셋 생성
 trainset, testset = train_test_split(data, test_size=0.1,random_state=1) # x하나만 들어가 x_train,x_test만 나옴
