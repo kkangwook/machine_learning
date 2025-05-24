@@ -150,9 +150,9 @@ def tokenizer(x):
     from sklearn.metrics import accuracy_score, f1_score,confusion_matrix, classification_report, roc_curve, roc_auc_score
           function(y_true,y_pred)로 사용  #classification_report로 정밀도 , 재현율, f1 score 확인가능
         -roc curve그리기: 이진분류모델 성능 평가 
-            x,y,N=roc_curve(y_test,y_pred_proba)
+            x,y,N=roc_curve(y_test,y_pred_proba[:,1]) # class1일 확률값을 1차원으로
             plt.plot(x,y) -> roc밑의 면적=AUC가 클수록 좋음(0.9이상이면 매우 정확) 
-                -auc보는 법 print('auc는: ',roc_auc_score(y_test, y_pred_proba))
+                -auc보는 법 print('auc는: ',roc_auc_score(y_test, y_pred_proba[:,1]))
     -- 1-2-1 from sklearn.neighbors import KNeighborsClassifier
             kn=KNeighborsClassifier()
       -#하이퍼파라미터
