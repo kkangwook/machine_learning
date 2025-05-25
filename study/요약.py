@@ -124,6 +124,7 @@ def tokenizer(x):
 
     -- 1-1-6 from xgboost import XGBRegressor : 캐글 탑 5 회귀모델
             from xgboost import plot_importance # 중요변수 시각화 
+        #정규화 안해도 됨
                 xr= XGBRegressor(objective='reg:squarederror', random_state=123)  
         # 파라미터:
             params= {'n_estimators': [100, 300, 500], #트리개수
@@ -136,6 +137,10 @@ def tokenizer(x):
         fscore = xr.get_booster().get_fscore() 
         # 중요변수 시각화 
         plot_importance(xr, max_num_features=13) # 13개까지 나타냄
+
+
+
+
 
 
   --- 1-2 #분류: x는 연속숫자 및 원핫인코딩-레이블인코딩-bow-tfidf전부 가능
