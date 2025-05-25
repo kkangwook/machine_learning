@@ -42,6 +42,9 @@ from sklearn.linear_model import Ridge, Lasso
 - 릿지 라쏘 둘다보기
 --!!!!그리드나 랜덤서치 사용도해보기!!!!---
 
+4. xgboostregressor이용
+
+
 
 #2. classification
 주피터->machine_learining->복습으로
@@ -107,6 +110,9 @@ rs-> 분포범위 불러오는 함수-> 파라미터 4가지 지정->rs 파라�
 트리 4종류 각각 rs서치로 진행-> 각 트리 기본 파라미터 -> 파라미터 지정하고 rs의 파라미터도 지정하고 학습
 -> 이때 3번째 꺼에 새로운 옵션 적용 -> 4번째는 좀 다른 파라미터 4가지 ->  최적파라미터보기->그때의 검증점수보기
 -> 최적모델 불러와 특성중요도 보기 -> x_test[:5]예측하고 score보기
+
+3-2. xgboostclassifier
+
 
 4. 다중 분류
 from sklearn.datasets import load_iris
