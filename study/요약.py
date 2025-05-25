@@ -256,7 +256,7 @@ def tokenizer(x):
                 **또한 early_stopping_rounds=n으로 손실값 다시 증가하면 n까지 가기 전에 멈춤 **
         -#하이퍼파라미터:
             params = {'colsample_bytree': [0.5, 0.7, 1], #각 트리 생성 시 사용하는 feature 비율
-                      'learning_rate': [0.01, 0.05, 0.1, 0.2, 0.3] #값이 낮을수록 학습이 느리지만 일반화 성능 좋음
+                      'learning_rate': [0.01, 0.05, 0.1, 0.2, 0.3], #값이 낮을수록 학습이 느리지만 일반화 성능 좋음
                       'max_depth' : randint(5,15),
                       'min_child_weight' : [1, 3, 5], #자식 노드 분할을 결정하는 최소 가중치의 합 -> 작으면 더 만흥 자식 노드 분할
                       'n_estimators' : [100, 200, 300,500]} # 트리개수
