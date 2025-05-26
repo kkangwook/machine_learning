@@ -357,7 +357,7 @@ transaction = transaction.astype(bool) # 부울형(True/False) 변환 -> 위의 
 --- transaction 생성2
 data는 인덱스가 구매번호, 컬럼(0~30)이 한번의 구매해서 순서대로 산 물건
 bought_products = []
-for row in data.values:
+for row in data.values:  #각 행을 리스트로 가져오기
     bought_products.append([str(item) for item in row if str(item) != 'nan'])
 from mlxtend.preprocessing import TransactionEncoder
 te = TransactionEncoder() 
