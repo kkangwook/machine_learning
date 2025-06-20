@@ -462,7 +462,27 @@ accuracy.rmse(preds)
 
 
 
-4. 강화학습 
+
+
+4.시계열분석 : 시계열자료(시간에 따른 결과) 학습하여 미래 변화에 대한 추세 예측
+x: 시간변수(독립), y:종속변수(주가, 온도 등)
+
+pip install prophet
+from prophet import Prophet # 프로펫 시계열분석 알고리즘
+1. 모델선정: 단순시계열모델(독립변수1개) or 다중시계열모델(독립변수2개이상-주가+환율+금리로 경제예측)
+2. 시간변수 datetime자료형으로
+3. 훈련셋(과거자료/2010~20년), 평가셋(미래자료/2020~2025)으로 분리
+4. 
+model = Prophet(yearly_seasonality=True, 
+                weekly_seasonality=True,
+                daily_seasonality=False,
+                seasonality_mode='multiplicative')
+
+model.fit(train)
+
+
+
+5. 강화학습 
 
 
 
