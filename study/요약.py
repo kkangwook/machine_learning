@@ -469,20 +469,84 @@ x: 시간변수(독립), y:종속변수(주가, 온도 등)
 
 pip install prophet
 from prophet import Prophet # 프로펫 시계열분석 알고리즘
-1. 모델선정: 단순시계열모델(독립변수1개) or 다중시계열모델(독립변수2개이상-주가+환율+금리로 경제예측)
-2. 시간변수 datetime자료형으로
-3. 훈련셋(과거자료/2010~20년), 평가셋(미래자료/2020~2025)으로 분리
-4. 
+1). 모델선정: 단순시계열모델(독립변수1개) or 다중시계열모델(독립변수2개이상-주가+환율+금리로 경제예측)
+2). 시간변수 datetime자료형으로
+df['day'] = pd.to_datetime(df['day'])
+3). 훈련셋(과거자료/2010~20년), 평가셋(미래자료/2020~2025)으로 분리
+train = df.loc[(df.day >= '2011-01-01') & (df.day <= '2012-10-31'),col]
+test = df.loc[df.day >= '2012-11-01',col]
+4). 모델생성
+model = Prophet(   #모두 true하면 과적합 가능성 있음 
+    yearly_seasonality=True,         # 연간 주기 포함 여부(월,주,일,시간 전부 가능)
+    weekly_seasonality=True,         # 주간 주기 포함 여부(일, 시간 단위에 대해 가능)
+    daily_seasonality=False,         # 일간 주기 포함 여부(최소 시간 데이터가 있어야함)
+    seasonality_mode='multiplicative' # 계절성 적용 방식-> multiplicative(강한계절성이 있는경우) vs additive(없는경우)
+)
+model.fit(train)
+
+5). model.predict하기(앞으로 볼 미래 우리가 정보 설정해 만들어줘야함-단위의수(61일 or 61개월 or 61년등), 단위)
+future_date = model.make_future_dataframe(periods=61, freq='D') # 'D'ay, 'W'eek, 'M'onth,'Y'ear,'H'our,'min','S'econd
+future_pred = model.predict(future_date) # 모델 예측 
+# 각 주시별 추세가 어떤지(연도별, 일별, 개월별 등)
+model.plot_components(future_pred)
+plt.show()
+
+6). 예측결과 시각화(미래 추세선보기)
+model.plot(fcst=future_pred)
+plt.show()
+
+7). 실제데이터로 검증과 비교
+y_pred = future_pred.iloc[-61:, -1]  #예측한 부분 값 가져오기
+y_test = test.y  #실제값
+score = r2_score(y_test, y_pred)
+
+#그래프로 나타내기-> 예측 vs 실제
+plt.plot(test.day, y_test, c='b', label='real data')
+plt.plot(test.day, y_pred, c='r', label = 'predicted data')
+
+추가1).파라미터 튜닝
+# 휴일파라미터 추가
+holidays = data.loc[df['holiday'] == 1, 'day'] #이미 있던 휴일컬럼정보(1이면 휴일임)
+holi_df = pd.DataFrame({'holiday':'holiday',
+                            'day':holidays,
+                            'lower_window':0,
+                            'upper_window':0})
 model = Prophet(yearly_seasonality=True, 
                 weekly_seasonality=True,
                 daily_seasonality=False,
+                holidays= holi_df,     #여기에 추가
+                seasonality_mode='multiplicative')
+model = model2.fit(train)  
+
+추가2). 다중시계열모델
+# 컬럼추가후 concat
+add_df = df[['weathersit','temp','windspeed','hum']]
+new_df = pd.concat([df,add_df], axis = 1)
+
+#다중(multiply)시계열모델 : 독립변수 2개 이상 
+model = Prophet(yearly_seasonality=True, #여기는 그대로
+                weekly_seasonality=True,
+                daily_seasonality=False,
+                holidays= holi_df,
                 seasonality_mode='multiplicative')
 
-model.fit(train)
+# model에 독립변수 추가 
+model.add_regressor('weathersit') # 날씨
+model.add_regressor('temp') # 온도 
+model.add_regressor('hum') # 습도 
+model.add_regressor('windspeed') # 풍속
+
+# 모델 학습 : 훈련셋 반영 
+model = model.fit(train)
+
+
+
+
 
 
 
 5. 강화학습 
+
 
 
 
