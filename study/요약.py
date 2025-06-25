@@ -518,26 +518,44 @@ model = Prophet(yearly_seasonality=True,
                 seasonality_mode='multiplicative')
 model = model2.fit(train)  
 
+
+
 추가2). 다중시계열모델
-# 컬럼추가후 concat
-add_df = df[['weathersit','temp','windspeed','hum']]
-new_df = pd.concat([df,add_df], axis = 1)
+# 1. 데이터 준비
+!!! 첫번째 컬럼이 x, 두번째 컬럼을 y로 두고 다시뒤에 변수들 있는 구조!!!! 
+df = data[['dteday', 'registered', 'weathersit', 'temp', 'windspeed', 'hum']].copy()
+df.columns = ['ds', 'y', 'weathersit', 'temp', 'windspeed', 'hum']
+df['ds'] = pd.to_datetime(df['ds'])
 
-#다중(multiply)시계열모델 : 독립변수 2개 이상 
-model = Prophet(yearly_seasonality=True, #여기는 그대로
-                weekly_seasonality=True,
-                daily_seasonality=False,
-                holidays= holi_df,
-                seasonality_mode='multiplicative')
+# 2. 휴일 데이터 준비
+holidays = data.loc[data['holiday'] == 1, 'dteday']
+holi_df = pd.DataFrame({
+    'holiday': 'holiday',
+    'ds': pd.to_datetime(holidays),
+    'lower_window': 0,
+    'upper_window': 0
+})
 
-# model에 독립변수 추가 
-model.add_regressor('weathersit') # 날씨
-model.add_regressor('temp') # 온도 
-model.add_regressor('hum') # 습도 
-model.add_regressor('windspeed') # 풍속
+# 3. Train/Test 분리
+train = df[df['ds'] <= '2012-10-31']
+test = df[df['ds'] >= '2012-11-01']
 
-# 모델 학습 : 훈련셋 반영 
-model = model.fit(train)
+# 4. 다중변량 Prophet 모델 생성 및 학습
+model = Prophet(
+    yearly_seasonality=True,
+    weekly_seasonality=True,
+    daily_seasonality=False,
+    seasonality_mode='multiplicative',
+    holidays=holi_df
+)
+
+# 다중 변수(regressor) 추가
+!!!!이때 앞의 두 컬럼이 각각 x,y임->자동으로 인식됨
+for col in ['weathersit', 'temp', 'windspeed', 'hum']:
+    model.add_regressor(col)   #따라서 추가변수는 더해줘야함
+
+# 학습
+model.fit(train)
 
 
 
