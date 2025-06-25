@@ -516,7 +516,7 @@ model = Prophet(yearly_seasonality=True,
                 daily_seasonality=False,
                 holidays= holi_df,     #여기에 추가
                 seasonality_mode='multiplicative')
-model = model2.fit(train)  
+model = model.fit(train)  
 
 
 
