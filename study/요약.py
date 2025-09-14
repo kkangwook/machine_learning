@@ -39,6 +39,7 @@ def tokenizer(x):
     tokens=word_tokenize(x.lower())
     tokens=[i for i in tokens if len(i)>2 and i not in stop_words]
     tokens=[stemmer.stem(i) for i in tokens]
+    #tokens=[i for i in tokens if i.isalpha()] #알파벳만가져오기
     return tokens
 ------------------------------------------
 
