@@ -131,7 +131,8 @@ def tokenizer(x):
                     'max_depth': [3, 5, 7],
                     'learning_rate': [0.01, 0.05, 0.1],
                     'subsample': uniform(0.7,1)} #학습에 사용할 데이터 비율
-                xr(rs).fit(x_train,y_train) # x는 수치나 원핫인코딩, y는 수치 
+                xr(rs).fit(x_train,y_train, eval_set=[(x_test,y_test)], verbose=True or False) # x는 수치나 원핫인코딩, y는 수치, verbose는 매 epoch마다 mse보여줘서 false가 좋을수도
+                            -> early_stopping_rounds도 설정가능
         # 중요변수 확인 
         xr.feature_importances_
         fscore = xr.get_booster().get_fscore() 
@@ -260,8 +261,9 @@ def tokenizer(x):
                       'max_depth' : randint(5,15),
                       'min_child_weight' : [1, 3, 5], #자식 노드 분할을 결정하는 최소 가중치의 합 -> 작으면 더 만흥 자식 노드 분할
                       'n_estimators' : [100, 200, 300,500]} # 트리개수
-             xc(rs).fit(x_train,y_train, eval_set=[(x_test,y_test)], verbose=True) #x는 수치,원핫인코딩 y는 레이블인코딩
-                                -> eval_set설정하고 verbose=True하면 매 iter마다 손실값(mlogloss)이 뜸 
+             xc(rs).fit(x_train,y_train, eval_set=[(x_test,y_test)], verbose=True or False) #x는 수치,원핫인코딩 y는 레이블인코딩
+                                -> eval_set설정하고 verbose=True하면 매 iter마다 손실값(mlogloss)이 뜸 -> False하는게 좋음
+                                -> early_stopping_rounds도 설정가능
         -# 중요변수 시각화
             xc.feature_importances_
             xc.get_booster().get_fscore() # 각 클래스별 fscore 보여줌 
