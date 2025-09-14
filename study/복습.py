@@ -87,6 +87,11 @@ newfish=pd.DataFrame(data)
 --!!!!그리드나 랜덤서치 사용도해보기!!!!---
 
 
+##############
+spam_data 이진분류하기
+##############
+
+
 #3. tree
 주피터->machine_learining->복습으로
 전부 wine.csv로 진행
