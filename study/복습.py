@@ -58,7 +58,7 @@ from sklearn.linear_model import Ridge, Lasso
 1.은 스킵
 2. skin.csv는 logistic regression 이진분류
 3. fish_7species는 stochastic_gradient_descent쓰고(추가학습하는방법)-> decision_tree -> randomforest -> xgboost
-4. spam_data 이진분류하기 두가지 방법(svm, multimomalNB)
+4. spam_data 이진분류하기 세가지 방법(텍스트에 강한 3가지: logistic regression,svm, multimomalNB)
 #####################################
 
 1. k-neighbor classification
