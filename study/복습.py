@@ -15,6 +15,12 @@
 #1. linear regression
 
 주피터->machine_learining->복습으로
+#################################
+1.은 스킵
+2.perch_3v를 linear regression으로 회귀후 cv
+3.perch_3v poly하고 ridge/lasso randomizedsearchcv사용
+4.xgboost사용
+################################
 
 1.  K-최근접 이웃회귀
 import matplotlib.pyplot as plt
@@ -48,7 +54,12 @@ from sklearn.linear_model import Ridge, Lasso
 
 #2. classification
 주피터->machine_learining->복습으로
-전부 fish.csv로 진행
+####################################
+1.은 스킵
+2. skin.csv는 logistic regression 이진분류
+3. fish_7species는 stochastic_gradient_descent쓰고(추가학습하는방법)-> decision_tree -> randomforest -> xgboost
+4. spam_data 이진분류하기 두가지 방법(svm, multimomalNB)
+#####################################
 
 1. k-neighbor classification
 from sklearn.neighbors import KNeighborsClassifier
