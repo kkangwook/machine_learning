@@ -20,6 +20,7 @@
 2.perch_3v를 linear regression으로 회귀후 cv
 3.perch_3v poly하고 ridge/lasso randomizedsearchcv사용
 4.xgboost사용
+5. statsmodels사용
 ################################
 
 1.  K-최근접 이웃회귀
@@ -50,6 +51,7 @@ from sklearn.linear_model import Ridge, Lasso
 
 4. xgboostregressor이용
 
+5. statsmodels사용하기
 
 
 #2. classification
@@ -58,6 +60,7 @@ from sklearn.linear_model import Ridge, Lasso
 1.은 스킵
 2. skin.csv는 logistic regression 이진분류
 3. fish_7species는 stochastic_gradient_descent쓰고(추가학습하는방법)-> decision_tree -> randomforest -> xgboost
+3-2. statsmodels로 분류
 4. spam_data 이진분류하기 세가지 방법(텍스트에 강한 3가지: logistic regression,svm, multimomalNB)
 #####################################
 
@@ -97,6 +100,7 @@ newfish=pd.DataFrame(data)
 클래스값, 예측값, 확률값보기- z값, 함수를 통한 확률값 구하기
 --!!!!그리드나 랜덤서치 사용도해보기!!!!---
 
+3-2. statsmodels로 분류
 
 ##############
 spam_data 이진분류하기
