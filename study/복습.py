@@ -58,9 +58,8 @@ from sklearn.linear_model import Ridge, Lasso
 주피터->machine_learining->복습으로
 ####################################
 1.은 스킵
-2. skin.csv는 logistic regression 이진분류
+2. skin.csv는 logistic regression 이진분류 -> statsmodels로 분류(얘는 이진분류만가능하므로 다중분류는 mnlogit써야함)
 3. fish_7species는 stochastic_gradient_descent쓰고(추가학습하는방법)-> decision_tree -> randomforest -> xgboost
-3-2. statsmodels로 분류
 4. spam_data 이진분류하기 세가지 방법(텍스트에 강한 3가지: logistic regression,svm, multimomalNB)
 #####################################
 
