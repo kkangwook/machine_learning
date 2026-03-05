@@ -79,6 +79,19 @@ from sklearn.linear_model import LogisticRegression
 - roc보기-> auc 구하기 
 - z값, 함수를 통한 확률값 구하기
 
+
+###########이때 train 원핫인코딩하고 test원핫인코딩하는법(pd.get_dummies방법말고)###############
+from sklearn.preprocessing import OneHotEncoder
+OneHotEncoder(
+    drop='first',          # 더미 변수 하나 제거
+    handle_unknown='ignore', # test에 새로운 카테고리 나와도 에러 안남
+    sparse_output=False
+)
+X_train = preprocess.fit_transform(X_train)
+X_test = preprocess.transform(X_test)
+이때 범주형만 따로 transform하고 나중에 수치형이랑 concat!!!!!!!!!!!!
+#############################################################################################
+
 -2. 다중분류
 -fish 데이터 전처리 후 lr학습(규제와 횟수 정해서)->R^2비교-> 선형방정식 보기
 - test[:5]의 클래스값, 예측값, 확률값보기
